@@ -1,7 +1,6 @@
-import React, { useState, useContext } from 'react'
+import React, { useState } from 'react'
 import { TextField, FormControl, Button, Box } from "@material-ui/core"
 import AuthenticationService from '../Services/AuthenticationService'
-import { UserContext } from '../Components/Context/UserContext';
 
 const Login = (props) =>
 {
@@ -9,15 +8,12 @@ const Login = (props) =>
   const [userName, setUserName] = useState();
   const [password, setPassword] = useState();
 
-  const { setUser } = useContext(UserContext);
-
   function handleLogin()
   {
 
     AuthenticationService.Login(userName, password)
       .then((userInput) =>
       {
-        setUser(userInput);
         props.history.push('/');
       })
 

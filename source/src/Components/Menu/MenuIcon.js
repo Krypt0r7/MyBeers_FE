@@ -1,23 +1,24 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import AuthService from '../../Services/AuthenticationService'
 import { Menu, MenuItem, IconButton } from '@material-ui/core/'
 import AccountCircle from '@material-ui/icons/AccountCircle'
-import { UserContext } from '../Context/UserContext'
+// import { UserContext } from '../Context/UserContext'
 
 const MenuIcon = (props) =>
 {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
-  const { user, setUser } = useContext(UserContext)
+  // const { user, setUser } = useContext(UserContext)
+
+  const profile = localStorage.getItem('currentUser');
 
   const handleLogout = (event) =>
   {
     AuthService.Logout();
-    setUser(null);
     handleClose(event);
-    props.history.push('/login');
+    window.history.pushState()
   };
 
   const handleClose = () =>
@@ -56,7 +57,7 @@ const MenuIcon = (props) =>
         open={open}
         onClose={handleClose}
       >
-        {user ? (
+        {profile ? (
           <div>
             <Link to="/">
               <MenuItem onClick={handleClose}>Profile</MenuItem>

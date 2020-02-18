@@ -1,4 +1,6 @@
-export default function authHeader()
+import config from '../config'
+
+export const authHeader = () => 
 {
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   
@@ -8,5 +10,12 @@ export default function authHeader()
   } else
   {
     return [];
+  }
+}
+
+export const authHeaderSystemet = () => {
+  return {
+    'Ocp-Apim-Subscription-Key': config.systemetAccessKey,
+    'Access-Control-Allow-Origin': 'null'
   }
 }

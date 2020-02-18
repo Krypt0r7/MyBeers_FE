@@ -1,5 +1,5 @@
-import authHeader from '../Helpers/AuthenticationHeader'
-import HandleResponse from '../Helpers/HandleResponse'
+import {authHeader} from '../Helpers/AuthenticationHeader'
+import {HandleResponse} from '../Helpers/HandleResponse'
 import config from '../config'
 
 export const GetMyBeers = () => {
@@ -25,5 +25,18 @@ export const ToggleFavourite = (id) => {
     .then(HandleResponse)
     .then(beer => {
       return beer
+    })
+}
+
+export const SaveBeer = (prodNumber) => {
+  const requestOptions = {
+    method: 'POST',
+    headers: authHeader()
+  }
+
+  return fetch(`${config.myBeerApiUrl}/beer/byProd?productNumber=${prodNumber}`, requestOptions)
+    .then(HandleResponse)
+    .then(beer => {
+      return beer;
     })
 }

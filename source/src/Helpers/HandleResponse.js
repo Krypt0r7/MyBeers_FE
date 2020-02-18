@@ -1,6 +1,6 @@
 import AuthenticationService from '../Services/AuthenticationService'
 
-function HandleResponse(response)
+export const HandleResponse = (response) =>
 {
   return response.text().then(text =>
   {
@@ -18,5 +18,3 @@ function HandleResponse(response)
     return data;
   });
 }
-
-export default HandleResponse

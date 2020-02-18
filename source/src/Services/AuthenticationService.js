@@ -1,4 +1,4 @@
-import HandleResponse from '../Helpers/HandleResponse'
+import {HandleResponse} from '../Helpers/HandleResponse'
 import config from '../config'
 
 

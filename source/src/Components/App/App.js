@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import './App.css';
 import MenuBar from '../Menu/MenuBar'
 import SlideInMenu from '../SlideInMenu/SlideInMenu'
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
-import UserProvider from '../Context/UserContext'
 import Index from '../../Pages/Index'
 import MyBeers from '../../Pages/MyBeers'
 import Login from '../../Pages/Login'
 import Register from '../../Pages/Register'
 import Search from '../../Pages/Search'
+import SearchDetails from '../../Pages/SearchDetails'
+import SearchProvider from '../Context/SearchContext';
 
 
 
@@ -31,6 +32,11 @@ function App()
         light: '#efefef',
         dark: '#8d8d8d'
       }
+    },
+    typography: {
+      fontFamily: [
+        "san-serif"
+      ].join()
     }
   });
 
@@ -46,15 +52,18 @@ function App()
   return (
     <ThemeProvider theme={theme}>
       <Router>
-        <UserProvider>
           <SlideInMenu open={state.open} toggleDrawer={toggleDrawer} />
           <MenuBar open={toggleDrawer} />
-          <Route path="/" exact component={Index} />
-          <Route path="/mybeers" component={MyBeers} />
-          <Route path="/login" component={Login} />
-          <Route path="/register" component={Register} />
-          <Route path="/search" component={Search} />
-        </UserProvider>
+          <Switch>
+            <Route path="/" exact component={Index} />
+            <Route path="/mybeers" exact component={MyBeers} />
+            <Route path="/login" component={Login} />
+            <Route path="/register" component={Register} />
+            <SearchProvider>
+              <Route path="/search" exact component={Search} />
+              <Route path="/search/:id" component={SearchDetails} />
+            </SearchProvider>
+          </Switch>
       </Router>
 
       <footer></footer>

@@ -23,7 +23,7 @@ const SlideInMenu = (props) =>
         onClose={props.toggleDrawer(false)}>
         <List>
           <Link to="/">
-            <   ListItem button key="Home" >
+            <ListItem button key="Home" >
               <ListItemIcon><HomeIcon /></ListItemIcon>
               <ListItemText primary="Home" />
             </ListItem>

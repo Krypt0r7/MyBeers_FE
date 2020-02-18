@@ -4,7 +4,7 @@ import { Typography, Card, CardContent, CardMedia, CardActions, IconButton, Box 
 import FavouriteIcon from '@material-ui/icons/Favorite'
 import DeleteIcon from '@material-ui/icons/Delete'
 import FavouriteBorderIcon from '@material-ui/icons/FavoriteBorder'
-import config from '../config'
+import {buildUrl} from '../Helpers/BuildImageUrl'
 
 
 const MyBeers = () =>
@@ -20,15 +20,12 @@ const MyBeers = () =>
       })
   }, []);
 
-  const buildUrl = (productId) =>
-  {
-    return `${config.systemetImageBaseUrl}/${productId}/${productId}_300.png`
-  }
 
-  const handleFavouriteToggle = (id) => {
-    ToggleFavourite(id)
-      .then((beer) => setBeers(prevState => ({
-      })))
+  const handleFavouriteToggle = async (id, index) => {
+    const newBeer = await ToggleFavourite(id);
+    const newBeers = [...beers]
+    newBeers[index] = newBeer;
+    setBeers(newBeers)
   }
 
   const handleDelete = (id) => {
@@ -37,16 +34,16 @@ const MyBeers = () =>
 
   return (
     <div className='card-container'>
-      {beers && beers.map(beer => (
-        <Box boxShadow="3">
-          <Card key={beer.id} className='card-main' >
+      {beers && beers.map((beer, index) => (
+        <Box key={beer.id} boxShadow="3">
+          <Card  className='card-main' >
             <div className='card-details'>
               <CardContent className='card-content'>
                 <Typography variant='overline'>{beer.beerData.productName}</Typography>
                 <Typography variant='body2'>{beer.beerData.type}</Typography>
               </CardContent>
               <CardActions className='card-actions'>
-                <IconButton onClick={handleFavouriteToggle}>
+                <IconButton onClick={() => handleFavouriteToggle(beer.id, index)}>
                   {beer.favourite ?
                     <FavouriteIcon className='favourite-icon'/> :
                     <FavouriteBorderIcon />
@@ -57,7 +54,7 @@ const MyBeers = () =>
                 </IconButton>
               </CardActions>
             </div>
-            <CardMedia
+            <CardMedia style={{backgroundSize: 'contain'}}
               className='card-image'
               image={buildUrl(beer.beerData.productId)} />
           </Card>
