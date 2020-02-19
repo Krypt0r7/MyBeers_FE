@@ -35,7 +35,8 @@ function App()
     },
     typography: {
       fontFamily: [
-        "san-serif"
+        '"Segoe UI"',
+        'san-serif'
       ].join()
     }
   });

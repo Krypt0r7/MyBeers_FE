@@ -15,28 +15,23 @@ export const GetMyBeers = () => {
     })
 }
 
-export const ToggleFavourite = (id) => {
+
+export const SaveBeer = (prodNumber) => {
   const requestOptions = {
     method: 'PUT',
     headers: authHeader()
   }
 
-  return fetch(`${config.myBeerApiUrl}/beer/${id}`, requestOptions)
+  return fetch(`${config.myBeerApiUrl}/user/add-beer?productNumber=${prodNumber}`, requestOptions)
     .then(HandleResponse)
-    .then(beer => {
-      return beer
-    })
 }
 
-export const SaveBeer = (prodNumber) => {
+export const RemoveBeer = (beerId) => {
   const requestOptions = {
-    method: 'POST',
+    method: 'PUT',
     headers: authHeader()
   }
-
-  return fetch(`${config.myBeerApiUrl}/beer/byProd?productNumber=${prodNumber}`, requestOptions)
+  return fetch(`${config.myBeerApiUrl}/user/remove-beer?beerId${beerId}`, requestOptions)
     .then(HandleResponse)
-    .then(beer => {
-      return beer;
-    })
+
 }

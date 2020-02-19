@@ -1,29 +1,16 @@
 
 import React from 'react'
-import { Snackbar, IconButton } from "@material-ui/core"
-import CloseIcon from '@material-ui/icons/Close'
+import Snackbar from '@material-ui/core/Snackbar'
 
-
-const CustomSnackBar = (props) =>
-{
+const CustomSnackBar = (props) => {
   return(
-    <Snackbar
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right'
-      }}
+    <Snackbar 
+      anchorOrigin={{vertical: 'top', horizontal: 'right'}}
+      autoHideDuration={4000}
       open={props.open}
-      autoHideDuration={2000}
-      message={props.message + ' was added'}
-      action={
-        <React.Fragment>
-          <IconButton size='small' color='inherit' onClick={() => props.close(false)}>
-            <CloseIcon fontSize='small' />
-          </IconButton>
-        </React.Fragment>
-      }>
-
-    </Snackbar>
-  )}
-
+      onClose={props.handleClose}
+      onClick={props.handleClose}
+      message= {props.prod + props.action}/>
+  )
+}
 export default CustomSnackBar

@@ -10,9 +10,7 @@ const MenuIcon = (props) =>
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
-  // const { user, setUser } = useContext(UserContext)
-
-  const profile = localStorage.getItem('currentUser');
+  const profile = JSON.parse(localStorage.getItem('currentUser'));  
 
   const handleLogout = (event) =>
   {
@@ -60,7 +58,7 @@ const MenuIcon = (props) =>
         {profile ? (
           <div>
             <Link to="/">
-              <MenuItem onClick={handleClose}>Profile</MenuItem>
+              <MenuItem onClick={handleClose}>{profile.username}</MenuItem>
             </Link>
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
           </div>
