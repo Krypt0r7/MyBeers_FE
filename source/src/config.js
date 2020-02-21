@@ -1,5 +1,5 @@
 const config = {
-  myBeerApiUrl: "https://mybeers-api.azurewebsites.net",
+  myBeerApiUrl: "http://mybeer-api.ronnerstedt.com",
   // myBeerApiUrl: "http://localhost:51210",
   systemetApiUrl: "https://api-extern.systembolaget.se/product/v1/product",
   systemetImageBaseUrl: "https://sb-product-media-prod.azureedge.net/productimages",
