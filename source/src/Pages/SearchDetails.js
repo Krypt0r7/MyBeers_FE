@@ -4,7 +4,7 @@ import { SearchContext } from '../Components/Context/SearchContext';
 import { useApiSearch } from '../Services/SystemetService';
 import { Card, Typography, CardMedia, Box, CardActions, Button } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress'
-import { SaveBeer } from '../Services/MyBeersService';
+import { useMyBeersApi } from '../Services/MyBeersService';
 import CustomSnackBar from '../Components/Generic/CustomSnackBar'
 import config from '../config'
 
@@ -26,6 +26,7 @@ const SearchDetails = () => {
   const {searchData} = useContext(SearchContext);
 
   const [state, executeSearch] = useApiSearch(true)
+  const [executeQuery] = useMyBeersApi(true)
 
   const searchResult = searchData && searchData.find(beer => beer.productNumber == id)
 
@@ -33,7 +34,7 @@ const SearchDetails = () => {
     executeSearch(`${config.myBeerApiUrl}/systemet/${id}`)
   }
   
-  const handleClose = (event, reason) => {
+  const handleClose = (reason) => {
     if (reason === 'clickaway') {
       return;
     }
@@ -42,9 +43,7 @@ const SearchDetails = () => {
   
   const handleAddBeer = async (productNumber) =>
   {
-    await SaveBeer(productNumber).catch((error) => {
-      console.log(error)
-    });
+    executeQuery(`${config.myBeerApiUrl}/user/add-beer?beerId=${productNumber}`, 'PUT');
     setOpen(true);
   }
   

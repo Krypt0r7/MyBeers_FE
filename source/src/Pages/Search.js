@@ -11,7 +11,6 @@ const Search = (props) =>
 {
   const [searchText, setSearchText] = useState();
 
-
   const { searchData, setSearchData } = useContext(SearchContext);
   
   const [state, executeSearch] = useApiSearch(true)

@@ -1,37 +1,30 @@
 import { authHeader } from '../Helpers/AuthenticationHeader'
-import { HandleResponse } from '../Helpers/HandleResponse'
-import config from '../config'
+import Axios from 'axios'
+import { useEffect, useState } from 'react'
 
-export const GetMyBeers = () => {
+export const useMyBeersApi = (manual, method) => {
+
+  const [beerState, setState] = useState({
+    data: null,
+    error: undefined,
+    loading: false
+  });
+
   const requestOptions = {
-    method: 'GET',
-    headers: authHeader()
-  }  
-
-  return fetch(`${config.myBeerApiUrl}/beer`, requestOptions)
-    .then(HandleResponse)
-    .then(beers => {
-      return beers
-    })
-}
-
-
-export const SaveBeer = (prodNumber) => {
-  const requestOptions = {
-    method: 'PUT',
+    method,
     headers: authHeader()
   }
-
-  return fetch(`${config.myBeerApiUrl}/user/add-beer?productNumber=${prodNumber}`, requestOptions)
-    .then(HandleResponse)
-}
-
-export const RemoveBeer = (beerId) => {
-  const requestOptions = {
-    method: 'PUT',
-    headers: authHeader()
+  const executeQuery = (path) => {
+    setState({...beerState, loading: true})
+    Axios.get(path, requestOptions)
+      .then(res => setState({data: res.data, loading: false, error: undefined}))
+      .catch(error => setState({data: null, loading: false, error}))
   }
-  return fetch(`${config.myBeerApiUrl}/user/remove-beer?beerId=${beerId}`, requestOptions)
-    .then(HandleResponse)
 
+  useEffect(() => {
+    !manual && executeQuery()
+  }, [executeQuery, manual]);
+  
+  return [beerState, executeQuery];
+  
 }

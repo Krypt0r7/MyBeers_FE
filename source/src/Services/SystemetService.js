@@ -27,13 +27,3 @@ export const useApiSearch = (manual = false) =>
   return [state, executeSearch];
   
 }
-
-export const GetSingleBeer = async (id) => {
-  const requestOptions = {
-    method: 'GET'
-  }
-  const searchQuery = `${config.myBeerApiUrl}/systemet/${id}`
-
-  const response = await axios.get(searchQuery, requestOptions);
-  return response.data;
-}

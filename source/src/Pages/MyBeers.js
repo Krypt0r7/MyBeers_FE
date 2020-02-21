@@ -1,27 +1,24 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { GetMyBeers, RemoveBeer } from '../Services/MyBeersService'
+import { useMyBeersApi } from '../Services/MyBeersService'
 import { Typography, Card, CardContent, CardMedia, CardActions, IconButton, Box } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete'
 import Rating from '@material-ui/lab/Rating'
 import { buildUrl } from '../Helpers/BuildImageUrl'
 import { ErrorContext } from '../Components/Context/ErrorContext';
-
+import config from '../config'
 
 const MyBeers = () =>
 {
   const [beers, setBeers] = useState();
   const { setError } = useContext(ErrorContext);
 
+  const [beerState, executeQuery] = useMyBeersApi(true)
+
   useEffect(() =>
   {
-    GetMyBeers()
-      .then((beersIn) =>
-      {
-        setBeers(beersIn)
-      }).catch((error) => {
-        error === 'Unauthorized' ? setError('You need to be logged in') : setError(error)
-      })
-  }, [setError]);
+    executeQuery(`${config.myBeerApiUrl}/beer`, 'GET');
+    
+  }, []);
 
 
   const handleRatingChange = async (id, index) =>
@@ -34,14 +31,14 @@ const MyBeers = () =>
 
   const handleDelete = async (id) =>
   {
-    await RemoveBeer(id);
+    executeQuery(`${config.myBeerApiUrl}/user/remove-beer?beerId=${id}`, 'PUT');
     const newBeers = beers.filter(beer => beer.id !== id);
     setBeers(newBeers)
   }
 
   return (
     <div className='card-container'>
-      {beers && beers.map((beer, index) => (
+      {beerState.data && beerState.data.map((beer, index) => (
         <Box key={beer.id} boxShadow="3">
           <Card className='card-main' >
             <div className='card-details'>
