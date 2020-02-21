@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { useMyBeersApi } from '../Services/MyBeersService'
+import { useQueryApi, useUpdateApi } from '../Services/MyBeersService'
 import { Typography, Card, CardContent, CardMedia, CardActions, IconButton, Box } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete'
 import Rating from '@material-ui/lab/Rating'
@@ -12,13 +12,17 @@ const MyBeers = () =>
   const [beers, setBeers] = useState();
   const { setError } = useContext(ErrorContext);
 
-  const [beerState, executeQuery] = useMyBeersApi(true)
+  const [beerState, executeQuery] = useQueryApi(true)
+  const {executeUpdate} = useUpdateApi(true)
 
   useEffect(() =>
   {
-    executeQuery(`${config.myBeerApiUrl}/beer`, 'GET');
-    
+    executeQuery(`${config.myBeerApiUrl}/beer`);
   }, []);
+  
+  useEffect(() => {
+    beerState && setBeers(beerState.data);
+  }, [beerState.data])
 
 
   const handleRatingChange = async (id, index) =>
@@ -31,14 +35,14 @@ const MyBeers = () =>
 
   const handleDelete = async (id) =>
   {
-    executeQuery(`${config.myBeerApiUrl}/user/remove-beer?beerId=${id}`, 'PUT');
+    executeUpdate(`${config.myBeerApiUrl}/user/remove-beer?beerId=${id}`);
     const newBeers = beers.filter(beer => beer.id !== id);
     setBeers(newBeers)
   }
 
   return (
     <div className='card-container'>
-      {beerState.data && beerState.data.map((beer, index) => (
+      {beers && beers.map((beer, index) => (
         <Box key={beer.id} boxShadow="3">
           <Card className='card-main' >
             <div className='card-details'>

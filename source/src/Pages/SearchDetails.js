@@ -4,7 +4,7 @@ import { SearchContext } from '../Components/Context/SearchContext';
 import { useApiSearch } from '../Services/SystemetService';
 import { Card, Typography, CardMedia, Box, CardActions, Button } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress'
-import { useMyBeersApi } from '../Services/MyBeersService';
+import { useUpdateApi } from '../Services/MyBeersService';
 import CustomSnackBar from '../Components/Generic/CustomSnackBar'
 import config from '../config'
 
@@ -26,7 +26,7 @@ const SearchDetails = () => {
   const {searchData} = useContext(SearchContext);
 
   const [state, executeSearch] = useApiSearch(true)
-  const [executeQuery] = useMyBeersApi(true)
+  const {executeUpdate} = useUpdateApi(true)
 
   const searchResult = searchData && searchData.find(beer => beer.productNumber == id)
 
@@ -41,9 +41,9 @@ const SearchDetails = () => {
     setOpen(false)
   }
   
-  const handleAddBeer = async (productNumber) =>
+  const handleAddBeer = (productNumber) =>
   {
-    executeQuery(`${config.myBeerApiUrl}/user/add-beer?beerId=${productNumber}`, 'PUT');
+    executeUpdate(`${config.myBeerApiUrl}/user/add-beer?productNumber=${productNumber}`);
     setOpen(true);
   }
   

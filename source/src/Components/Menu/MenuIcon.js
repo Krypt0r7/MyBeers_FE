@@ -16,7 +16,6 @@ const MenuIcon = (props) =>
   {
     AuthService.Logout();
     handleClose(event);
-    window.history.pushState()
   };
 
   const handleClose = () =>
