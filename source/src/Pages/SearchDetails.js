@@ -1,11 +1,12 @@
 import React,  { useEffect, useState, useContext } from 'react'
 import {useParams} from 'react-router'
 import { SearchContext } from '../Components/Context/SearchContext';
-import { GetSingleBeer } from '../Services/SystemetService';
+import { useApiSearch } from '../Services/SystemetService';
 import { Card, Typography, CardMedia, Box, CardActions, Button } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { SaveBeer } from '../Services/MyBeersService';
 import CustomSnackBar from '../Components/Generic/CustomSnackBar'
+import config from '../config'
 
 const SearchDetails = () => {
 
@@ -15,9 +16,6 @@ const SearchDetails = () => {
     marginBottom: "1em"
   }
 
-  const circularStyle = {
-    color: "#3F88C5"
-  }
   const sectionStyle = {
     marginBottom: ".5em"
   }
@@ -27,33 +25,41 @@ const SearchDetails = () => {
   const [open, setOpen] = useState(false);
   const {searchData} = useContext(SearchContext);
 
+  const [state, executeSearch] = useApiSearch(true)
+
   const searchResult = searchData && searchData.find(beer => beer.productNumber == id)
 
-  const getSelectedBeerFromApi = async () =>  { setSelectedBeer(await GetSingleBeer(id)) }
-
+  const getSelectedBeerFromApi = () =>  {
+    executeSearch(`${config.myBeerApiUrl}/systemet/${id}`)
+  }
+  
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
     }
     setOpen(false)
   }
-  const handleOpen = () => setOpen(true);
-
+  
   const handleAddBeer = async (productNumber) =>
   {
-    await SaveBeer(productNumber);
-    handleOpen();
+    await SaveBeer(productNumber).catch((error) => {
+      console.log(error)
+    });
+    setOpen(true);
   }
-
+  
   useEffect(() => {
-   searchResult ? setSelectedBeer(searchResult) : getSelectedBeerFromApi()
+    searchResult ? setSelectedBeer(searchResult) : getSelectedBeerFromApi()
   }, [])
+  
+  useEffect(() => {
+    state.data && setSelectedBeer(state.data);
+  }, [state.data])
   
   return (
     <>
-    <Card className="details-card">
-        {selectedBeer ?
-          <>
+      {selectedBeer ?
+        <Card className="details-card">
             <CardMedia image={selectedBeer.imageUrl} style={contentStyle}/>
             <Typography style={sectionStyle} variant="overline" >{selectedBeer.beverageDescriptionShort}</Typography>
             <Typography variant="h5">{selectedBeer.productName}</Typography>
@@ -71,17 +77,15 @@ const SearchDetails = () => {
                 <Button onClick={() => handleAddBeer(selectedBeer.productNumber)} size="medium" variant="outlined">Add beer</Button>
               </Box>
             </CardActions>
-          </>
-          :
-          <CircularProgress style={circularStyle}  />
-        }
-
-
-    
-    </Card>
+        </Card>
+        :
+        <Box display="flex" justifyContent="center" alignItems="center" height="90vh">
+          <CircularProgress color="secondary" size="100" />
+        </Box>
+      }    
     <CustomSnackBar 
       open={open}
-      onClose={handleClose}
+      close={handleClose}
       prod={selectedBeer && selectedBeer.productName}
       action=' was added'/>
     </>

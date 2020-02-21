@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { GetMyBeers, RemoveBeer } from '../Services/MyBeersService'
 import { Typography, Card, CardContent, CardMedia, CardActions, IconButton, Box } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete'
 import Rating from '@material-ui/lab/Rating'
 import { buildUrl } from '../Helpers/BuildImageUrl'
+import { ErrorContext } from '../Components/Context/ErrorContext';
 
 
 const MyBeers = () =>
 {
   const [beers, setBeers] = useState();
-  const [rating, setRating] = useState();
+  const { setError } = useContext(ErrorContext);
 
   useEffect(() =>
   {
@@ -17,8 +18,10 @@ const MyBeers = () =>
       .then((beersIn) =>
       {
         setBeers(beersIn)
+      }).catch((error) => {
+        error === 'Unauthorized' ? setError('You need to be logged in') : setError(error)
       })
-  }, []);
+  }, [setError]);
 
 
   const handleRatingChange = async (id, index) =>
@@ -48,7 +51,7 @@ const MyBeers = () =>
               </CardContent>
               <CardActions className='card-actions'>
                 <IconButton onClick={() => handleRatingChange(beer.id, index)}>
-                  <Rating name="beerRating"/>
+                  <Rating name={beer.id}/>
                 </IconButton>
                 <IconButton onClick={() => handleDelete(beer.id)}>
                   <DeleteIcon />
@@ -60,8 +63,6 @@ const MyBeers = () =>
               image={buildUrl(beer.beerData.productId)} />
           </Card>
         </Box>
-
-
       ))}
     </div>
   )

@@ -5,11 +5,10 @@ import Snackbar from '@material-ui/core/Snackbar'
 const CustomSnackBar = (props) => {
   return(
     <Snackbar 
-      anchorOrigin={{vertical: 'top', horizontal: 'right'}}
+      anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
       autoHideDuration={4000}
       open={props.open}
-      onClose={props.handleClose}
-      onClick={props.handleClose}
+      onClick={props.close}
       message= {props.prod + props.action}/>
   )
 }

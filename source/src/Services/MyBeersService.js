@@ -1,5 +1,5 @@
-import {authHeader} from '../Helpers/AuthenticationHeader'
-import {HandleResponse} from '../Helpers/HandleResponse'
+import { authHeader } from '../Helpers/AuthenticationHeader'
+import { HandleResponse } from '../Helpers/HandleResponse'
 import config from '../config'
 
 export const GetMyBeers = () => {
@@ -31,7 +31,7 @@ export const RemoveBeer = (beerId) => {
     method: 'PUT',
     headers: authHeader()
   }
-  return fetch(`${config.myBeerApiUrl}/user/remove-beer?beerId${beerId}`, requestOptions)
+  return fetch(`${config.myBeerApiUrl}/user/remove-beer?beerId=${beerId}`, requestOptions)
     .then(HandleResponse)
 
 }

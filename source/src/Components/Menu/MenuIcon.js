@@ -57,7 +57,7 @@ const MenuIcon = (props) =>
       >
         {profile ? (
           <div>
-            <Link to="/">
+            <Link to="/profile">
               <MenuItem onClick={handleClose}>{profile.username}</MenuItem>
             </Link>
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
