@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 export const useQueryApi = (manual) =>
 {
 
-  const [beerState, setState] = useState({
+  const [queryState, setQueryState] = useState({
     data: null,
     error: undefined,
     loading: false
@@ -17,10 +17,10 @@ export const useQueryApi = (manual) =>
       method: 'GET',
       headers: authHeader()
     }
-    setState({ ...beerState, loading: true })
+    setQueryState({ ...queryState, loading: true })
     Axios.get(path, requestOptions)
-      .then(res => setState({ data: res.data, loading: false, error: undefined }))
-      .catch(error => setState({ data: null, loading: false, error }))
+      .then(res => setQueryState({ data: res.data, loading: false, error: undefined }))
+      .catch(error => setQueryState({ data: null, loading: false, error }))
   }
 
   useEffect(() =>
@@ -28,7 +28,7 @@ export const useQueryApi = (manual) =>
     !manual && executeQuery()
   }, [executeQuery, manual]);
 
-  return [beerState, executeQuery];
+  return [queryState, executeQuery];
 
 }
 

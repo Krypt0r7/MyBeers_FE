@@ -15,6 +15,7 @@ const Profile = () => {
         <div>
           <h2 className="text-center">Welcome {user.username}</h2>
         </div>
+        
       
       }
     </>

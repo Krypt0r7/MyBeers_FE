@@ -14,6 +14,7 @@ import SearchDetails from '../../Pages/SearchDetails'
 import SearchProvider from '../Context/SearchContext';
 import ErrorDisplayBoundry from '../Context/ErrorContext';
 import ErrorSnackbar from '../Generic/ErrorSnackBar';
+import ProtectedRoute from '../Generic/ProtectedRoute';
 
 
 
@@ -61,11 +62,11 @@ function App()
             <SlideInMenu open={state.open} toggleDrawer={toggleDrawer} />
             <MenuBar open={toggleDrawer} />
             <Switch>
-              <Route path="/" exact component={Index} />
-              <Route path="/mybeers" exact component={MyBeers} />
+              <ProtectedRoute path="/" exact component={Index} />
+              <ProtectedRoute path="/mybeers" exact component={MyBeers} />
+              <ProtectedRoute path="/profile" component={Profile} />
               <Route path="/login" component={Login} />
               <Route path="/register" component={Register} />
-              <Route path="/profile" component={Profile} />
               <SearchProvider>
                 <Route path="/search" exact component={Search} />
                 <Route path="/search/:id" component={SearchDetails} />
