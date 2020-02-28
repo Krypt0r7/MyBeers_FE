@@ -5,6 +5,7 @@ import { SearchContext } from '../Components/Context/SearchContext'
 import querryString from 'query-string'
 import config from '../config'
 import ProductCard from '../Components/Generic/ProductCard'
+import { ErrorContext } from '../Components/Context/ErrorContext'
 
 
 const Search = (props) =>
@@ -14,6 +15,8 @@ const Search = (props) =>
   const { searchData, setSearchData } = useContext(SearchContext);
   
   const [state, executeSearch] = useApiSearch(true)
+
+  const {setError} = useContext(ErrorContext)
 
   const handelKeyDown = (event) => {
     if (event.key === "Enter") {
@@ -31,10 +34,16 @@ const Search = (props) =>
         executeSearch(`${config.myBeerApiUrl}/systemet?search=${param.query}`)
       }
     }
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchData])
 
   useEffect(() => {
     state.data && setSearchData(state.data)
+    
+    if(state.data && state.data.length === 0){
+      setError('No search result')
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.data])
 
   return (
@@ -53,8 +62,8 @@ const Search = (props) =>
         {!state.loading ?
         <>
           {searchData && searchData.map(beer => (
-            <Box marginBottom=".5em">
-              <ProductCard key={beer.id} beer={beer} linkDestination={`/search/${beer.productNumber}`} />
+            <Box marginBottom=".5em" key={beer.productNumber} >
+              <ProductCard beer={beer} linkDestination={`/search/${beer.productNumber}`} />
             </Box>
           ))}
         </>

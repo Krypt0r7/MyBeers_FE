@@ -7,6 +7,7 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import { useUpdateApi } from '../Services/MyBeersService';
 import CustomSnackBar from '../Components/Generic/CustomSnackBar'
 import config from '../config'
+import VerticalLine from '../Components/Generic/VerticalLine';
 
 const SearchDetails = () => {
 
@@ -28,7 +29,7 @@ const SearchDetails = () => {
   const [state, executeSearch] = useApiSearch(true)
   const {executeUpdate} = useUpdateApi(true)
 
-  const searchResult = searchData && searchData.find(beer => beer.productNumber == id)
+  const searchResult = searchData && searchData.find(beer => parseInt(beer.productNumber) === id)
 
   const getSelectedBeerFromApi = () =>  {
     executeSearch(`${config.myBeerApiUrl}/systemet/${id}`)
@@ -49,10 +50,12 @@ const SearchDetails = () => {
   
   useEffect(() => {
     searchResult ? setSelectedBeer(searchResult) : getSelectedBeerFromApi()
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchResult])
   
   useEffect(() => {
     state.data && setSelectedBeer(state.data);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.data])
   
   return (
@@ -88,16 +91,6 @@ const SearchDetails = () => {
       prod={selectedBeer && selectedBeer.productName}
       action=' was added'/>
     </>
-  )
-}
-
-const VerticalLine = () => {
-  const lineStyle = {
-    borderLeft: "1px solid",
-    borderLeftColor: "rgba(0, 0, 0, 0.12)"
-  }
-  return (
-    <div style={lineStyle}></div>
   )
 }
 

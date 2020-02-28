@@ -12,6 +12,7 @@ export const useApiSearch = (manual = false) =>
   const requestOptions = {
     method: 'GET'
   }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const executeSearch = (searchQuery) => {
     setState({...state, loading: true})
     axios.get(searchQuery, requestOptions)

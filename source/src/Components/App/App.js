@@ -11,12 +11,13 @@ import Register from '../../Pages/Register'
 import Search from '../../Pages/Search'
 import Profile from '../../Pages/Profile'
 import SearchDetails from '../../Pages/SearchDetails'
+import BeerDetails from '../../Pages/BeerDetails'
+import Ratings from '../../Pages/Ratings'
+import RatingDetails from '../../Pages/RatingDetails'
 import SearchProvider from '../Context/SearchContext';
 import ErrorDisplayBoundry from '../Context/ErrorContext';
 import ErrorSnackbar from '../Generic/ErrorSnackBar';
 import ProtectedRoute from '../Generic/ProtectedRoute';
-
-
 
 function App()
 {
@@ -35,7 +36,11 @@ function App()
         main: '#bdbdbd',
         light: '#efefef',
         dark: '#8d8d8d'
+      },
+      error: {
+        main: '#D7263D',
       }
+
     },
     typography: {
       fontFamily: [
@@ -59,19 +64,22 @@ function App()
       <ErrorDisplayBoundry>
         <ErrorSnackbar />
         <Router>
-            <SlideInMenu open={state.open} toggleDrawer={toggleDrawer} />
-            <MenuBar open={toggleDrawer} />
-            <Switch>
-              <ProtectedRoute path="/" exact component={Index} />
-              <ProtectedRoute path="/mybeers" exact component={MyBeers} />
-              <ProtectedRoute path="/profile" component={Profile} />
-              <Route path="/login" component={Login} />
-              <Route path="/register" component={Register} />
-              <SearchProvider>
-                <Route path="/search" exact component={Search} />
-                <Route path="/search/:id" component={SearchDetails} />
-              </SearchProvider>
-            </Switch>
+          <SlideInMenu open={state.open} toggleDrawer={toggleDrawer} />
+          <MenuBar open={toggleDrawer} />
+          <Switch>
+            <ProtectedRoute path="/" exact component={Index} />
+            <ProtectedRoute path="/mybeers" exact component={MyBeers} />
+            <ProtectedRoute path="/mybeers/:id" component={BeerDetails} />
+            <ProtectedRoute path="/profile" component={Profile} />
+            <ProtectedRoute path="/ratings" exact component={Ratings} />
+            <ProtectedRoute path="/ratings/:id" component={RatingDetails} />
+            <Route path="/login" component={Login} />
+            <Route path="/register" component={Register} />
+            <SearchProvider>
+              <Route path="/search" exact component={Search} />
+              <Route path="/search/:id" component={SearchDetails} />
+            </SearchProvider>
+          </Switch>
         </Router>
 
         <footer></footer>
