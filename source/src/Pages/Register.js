@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import { TextField, FormControl, Button, Box } from "@material-ui/core"
+import {Link} from 'react-router-dom'
 import AuthenticationService from '../Services/AuthenticationService'
 
 
@@ -18,7 +19,7 @@ const Register = (props) =>
   }
 
   return (
-    <Box display="flex" justifyContent="center" height="100vh" alignItems="center">
+    <Box display="flex" flexDirection="column" justifyContent="center" height="80vh" alignItems="center">
       <FormControl>
         <TextField
           onChange={(event) => setUsername(event.target.value)}
@@ -34,6 +35,7 @@ const Register = (props) =>
           type="password" />
         <Button onClick={handleRegister}>Register</Button>
       </FormControl>
+      <Link to="/login">I already have an account!</Link>
     </Box>
   );
 }

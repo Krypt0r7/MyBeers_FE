@@ -12,7 +12,7 @@ export default () =>
 {
   const [beer, setBeer] = useState()
   const [myRating, setMyRating] = useState()
-  const [dialogOpen, setDialogOpen] = useState()
+  const [dialogOpen, setDialogOpen] = useState(false)
   const [queryState, executeQuery] = useQueryApi()  
   const { executeUpdate } = useUpdateApi()
   const { id } = useParams();
@@ -35,16 +35,16 @@ export default () =>
     setBeer(queryState.data)
   }, [queryState])
 
-  const handleRatingChange = (id) =>
-  {
-  }
 
   const handleClose = () => {
     setDialogOpen(false)
   }
 
-  const handleSave = (id) => {
-    executeUpdate(`${config.myBeerApiUrl}/rating/${id}`)
+  const handleSave = (rating, description) => {   
+    // console.log({rating, description});
+    
+    executeUpdate(`${config.myBeerApiUrl}/rating/${myRating.id}`, {rating, description})
+
     setDialogOpen(false)
   }
 
@@ -76,8 +76,7 @@ export default () =>
               beerId={beer.id} 
               created={myRating.createdTime} 
               rating={myRating.overallRating}
-              username={myRating.user.username} 
-              handleRatingChange={handleRatingChange}/>
+              username={myRating.user && myRating.user.username}/>
             : 
             <Box display="flex" flexDirection="column" alignItems="center">
               <Typography>You have not rated this beer!</Typography>
@@ -95,7 +94,7 @@ export default () =>
                     key={rating.id}
                     margin="1em 0">
                     <RatingUserRating 
-                      username={rating.user.username}
+                      username={rating.user && rating.user.username}
                       created={rating.createdTime}
                       rating={rating.overallRating} />
                     {rating.description &&
@@ -115,9 +114,10 @@ export default () =>
       }
       <RatingEditRating 
         handleClose={handleClose} 
-        handleSave={() => handleSave(myRating.id)}
+        handleSave={(rating, description) => handleSave(rating, description)}
         open={dialogOpen} 
-        rating={myRating && myRating} /> 
+        rating={myRating && myRating}
+        setMyRating={setMyRating} /> 
     </div>
   )
 }

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { TextField, FormControl, Button, Box } from "@material-ui/core"
 import AuthenticationService from '../Services/AuthenticationService'
+import { Link } from 'react-router-dom';
 
 const Login = (props) =>
 {
@@ -21,7 +22,7 @@ const Login = (props) =>
   }
 
   return (
-    <Box display="flex" justifyContent="center" height="100vh" alignItems="center">
+    <Box display="flex" flexDirection="column" justifyContent="center" height="85vh" alignItems="center">
       <FormControl>
         <TextField
           onChange={(event) => setUserName(event.target.value)}
@@ -33,6 +34,7 @@ const Login = (props) =>
           type="password" />
         <Button onClick={handleLogin} >Sign in</Button>
       </FormControl>
+      <Link to="/register">I don't have an account!</Link>
     </Box>
   );
 }

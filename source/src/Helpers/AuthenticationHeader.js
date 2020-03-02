@@ -14,8 +14,5 @@ export const authHeader = () =>
 }
 
 export const authHeaderSystemet = () => {
-  return {
-    'Ocp-Apim-Subscription-Key': config.systemetAccessKey,
-    'Access-Control-Allow-Origin': 'null'
-  }
+  return {'Ocp-Apim-Subscription-Key': config.systemetAccessKey}
 }

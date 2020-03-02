@@ -46,12 +46,15 @@ export const useUpdateApi = (manual) => {
     loading: false
   });
   
-  const executeUpdate = (path) =>
+  const executeUpdate = (path, payLoad) =>
   {
+    const authenticationHead = authHeader();
+    
     const requestOptions = {
-      method: 'PUT',
-      headers: authHeader()
+      headers: {...authenticationHead, "Content-Type": "application/json"},
+      data: {...payLoad}
     }
+
     setState({ ...updateState, loading: true })
     Axios.put(path, {}, requestOptions)
       .then(res => setState({ data: res.data, loading: false, error: undefined }))
