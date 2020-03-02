@@ -4,7 +4,7 @@ import Rating from '@material-ui/lab/Rating'
 import MoreVert from '@material-ui/icons/MoreVert'
 import moment from 'moment'
 
-export default ({username, rating, created, open}) =>
+export default ({username, rating, created, open, isOwner = false}) =>
 {
   const formatDate = (date) =>
   {
@@ -25,7 +25,7 @@ export default ({username, rating, created, open}) =>
           </Box>
         </Box>
       </Box>
-      { 
+      {isOwner &&
         <MoreVert onClick={open} />
       }
     </Box>

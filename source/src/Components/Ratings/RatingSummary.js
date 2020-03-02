@@ -39,7 +39,7 @@ export default ({ ratings }) =>
           <Box display="flex" justifyContent="space-evenly">
             <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
               <Typography variant="h2">{averageRating}</Typography>
-              <Rating name="averageRating" value={averageRating} />
+              <Rating precision={0.5} name="averageRating" value={averageRating} />
               <Typography>{ratings.length}</Typography>
             </Box>
             <VerticalLine />

@@ -13,8 +13,8 @@ export default () =>
   const [beer, setBeer] = useState()
   const [myRating, setMyRating] = useState()
   const [dialogOpen, setDialogOpen] = useState(false)
-  const [queryState, executeQuery] = useQueryApi()  
-  const { executeUpdate } = useUpdateApi()
+  const [queryState, executeQuery] = useQueryApi()
+  const { updateState, executeUpdate } = useUpdateApi()
   const { id } = useParams();
 
   const imageStyle = {
@@ -33,18 +33,26 @@ export default () =>
   useEffect(() =>
   {
     setBeer(queryState.data)
-  }, [queryState])
+  }, [queryState.data])
 
+  useEffect(() => {
+    if (updateState.data) {
+      setBeer({...beer, ratings: [...beer.ratings.filter(rating => rating.id !== myRating.id), updateState.data].sort((a, b) => {return new Date(a.createdTime) - new Date(b.createdTime)})})
+    }
+
+  }, [updateState.data])
 
   const handleClose = () => {
     setDialogOpen(false)
   }
 
-  const handleSave = (rating, description) => {   
-    // console.log({rating, description});
-    
-    executeUpdate(`${config.myBeerApiUrl}/rating/${myRating.id}`, {rating, description})
+  const handleSave = (rating, description) => {
 
+    if (myRating) {
+      executeUpdate(`${config.myBeerApiUrl}/rating/${myRating.id}`, {rating: parseInt(rating), description})
+    } else {
+      executeUpdate(`${config.myBeerApiUrl}/rating`, {rating: parseInt(rating), description, beerId: id})
+    }
     setDialogOpen(false)
   }
 
@@ -65,19 +73,20 @@ export default () =>
         <Card style={{ padding: ".5em" }}>
           <Box minHeight="10vh" width="100%" display="flex" marginBottom=".5em" justifyContent="space-between" >
             <Typography variant="overline">{beer.beerData.productName}</Typography>
-            <CardMedia 
-              style={imageStyle} 
+            <CardMedia
+              style={imageStyle}
               image={beer.beerData.imageUrl} />
           </Box>
           {beer.ratings.length !== 0 && (
           (myRating) ?
-            <RatingUserRating 
+            <RatingUserRating
               open={handleOpen}
-              beerId={beer.id} 
-              created={myRating.createdTime} 
+              beerId={beer.id}
+              created={myRating.createdTime}
               rating={myRating.overallRating}
-              username={myRating.user && myRating.user.username}/>
-            : 
+              username={myRating.user && myRating.user.username}
+              isOwner={true}/>
+            :
             <Box display="flex" flexDirection="column" alignItems="center">
               <Typography>You have not rated this beer!</Typography>
               <Button variant="outlined" onClick={handleOpen}>Rate now</Button>
@@ -90,10 +99,10 @@ export default () =>
                 <RatingSummary ratings={beer.ratings} />
                 <Divider style={{ margin: "1em" }} />
                 {beer.ratings.map(rating => (
-                  <Box 
+                  <Box
                     key={rating.id}
                     margin="1em 0">
-                    <RatingUserRating 
+                    <RatingUserRating
                       username={rating.user && rating.user.username}
                       created={rating.createdTime}
                       rating={rating.overallRating} />
@@ -112,12 +121,12 @@ export default () =>
           </Box>
         </Card>
       }
-      <RatingEditRating 
-        handleClose={handleClose} 
+      <RatingEditRating
+        handleClose={handleClose}
         handleSave={(rating, description) => handleSave(rating, description)}
-        open={dialogOpen} 
+        open={dialogOpen}
         rating={myRating && myRating}
-        setMyRating={setMyRating} /> 
+        setMyRating={setMyRating} />
     </div>
   )
 }

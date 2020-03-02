@@ -56,7 +56,7 @@ export const useUpdateApi = (manual) => {
     }
 
     setState({ ...updateState, loading: true })
-    Axios.put(path, {}, requestOptions)
+    Axios.post(path, {}, requestOptions)
       .then(res => setState({ data: res.data, loading: false, error: undefined }))
       .catch(error => {
         setState({ data: null, loading: false, error })
