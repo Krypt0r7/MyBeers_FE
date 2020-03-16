@@ -6,8 +6,8 @@ const ErrorSnackbar = () =>
 {
 
   const { error, setError } = useContext(ErrorContext)
-
-  const handleClick = () => {
+  
+  const handleClose = () => {
     setError(null)
   }
 
@@ -15,10 +15,11 @@ const ErrorSnackbar = () =>
     error &&
       <Snackbar
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-        autoHideDuration={4000}
+        autoHideDuration={3000}
         open={error ? true : false}
         message={error && error}
-        onClick={handleClick} />
+        onClose={handleClose}
+        onClick={handleClose} />
   )
 }
 

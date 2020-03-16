@@ -67,7 +67,7 @@ function App()
           <SlideInMenu open={state.open} toggleDrawer={toggleDrawer} />
           <MenuBar open={toggleDrawer} />
           <Switch>
-            <ProtectedRoute path="/" exact component={Index} />
+            <Route path="/" exact component={Index} />
             <ProtectedRoute path="/mybeers" exact component={MyBeers} />
             <ProtectedRoute path="/mybeers/:id" component={BeerDetails} />
             <ProtectedRoute path="/profile" component={Profile} />
@@ -82,7 +82,6 @@ function App()
           </Switch>
         </Router>
 
-        <footer></footer>
       </ErrorDisplayBoundry>
     </ThemeProvider>
   );

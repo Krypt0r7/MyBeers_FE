@@ -1,11 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import AuthService from '../../Services/AuthenticationService'
 import { Menu, MenuItem, IconButton } from '@material-ui/core/'
 import AccountCircle from '@material-ui/icons/AccountCircle'
 // import { UserContext } from '../Context/UserContext'
 
-const MenuIcon = (props) =>
+export default (props) =>
 {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -14,7 +13,8 @@ const MenuIcon = (props) =>
 
   const handleLogout = (event) =>
   {
-    AuthService.Logout();
+    localStorage.removeItem('currentUser');
+    
     handleClose(event);
   };
 
@@ -59,7 +59,9 @@ const MenuIcon = (props) =>
             <Link to="/profile">
               <MenuItem onClick={handleClose}>{profile.username}</MenuItem>
             </Link>
-            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            <Link to="/login"> 
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            </Link>
           </div>
         ) : (
             <div>
@@ -76,5 +78,3 @@ const MenuIcon = (props) =>
     </div>
   )
 }
-
-export default MenuIcon

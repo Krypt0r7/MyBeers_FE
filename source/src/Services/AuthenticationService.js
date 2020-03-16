@@ -1,7 +1,6 @@
 import {HandleResponse} from '../Helpers/HandleResponse'
 import config from '../config'
 
-
 const register = (username, email, password) => {
   const requestOptions = {
     method: 'POST',

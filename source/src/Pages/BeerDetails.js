@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { useParams } from "react-router"
-import { useQueryApi, useUpdateApi } from '../Services/MyBeersService';
+import { useQueryApi, useMyBeersCommandApi } from '../Services/MyBeersService';
 import config from '../config';
 import { ErrorContext } from '../Components/Context/ErrorContext';
 import { Card, CardMedia, Typography, Box, CardActions, Button, CircularProgress } from '@material-ui/core';
@@ -23,7 +23,7 @@ export default () => {
     marginBottom: ".5em"
   }
   
-  const {executeUpdate} = useUpdateApi()
+  const {executeCommand} = useMyBeersCommandApi()
   const [queryState, executeQuery] = useQueryApi()
   const [beer, setBeer] = useState();
   const {setError} = useContext(ErrorContext)
@@ -43,7 +43,7 @@ export default () => {
 
   const handleDelete = async (id) =>
   {
-    executeUpdate(`${config.myBeerApiUrl}/user/remove-beer?beerId=${id}`);
+    executeCommand(`${config.myBeerApiUrl}/user/remove-beer?beerId=${id}`);
     // queryState.error && setError(queryState.error)    
   }
   
@@ -69,8 +69,13 @@ export default () => {
             <Typography style={sectionStyle} variant="body1">{beer.beerData.taste}</Typography>
             <Box display="flex" flexDirection="row" justifyContent="flex-end" padding="0 0 5px 0">
               <Box display="flex" flexDirection="column">
-                <Typography variant="body1">My rating:</Typography>
-                <Rating name="overallRating" defaultValue={beer.rating ? beer.rating.overallRating : 0} />
+                {beer.rating && (
+                <>
+                  <Typography variant="body1">My rating:</Typography>
+                  <Rating name="overallRating" value={beer.rating ? beer.rating.overallRating : 0} />
+                </>
+                )
+                }
               </Box>
             </Box>
             <CardActions style={{padding: 0}}>

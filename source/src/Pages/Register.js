@@ -1,22 +1,33 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import { TextField, FormControl, Button, Box } from "@material-ui/core"
 import {Link} from 'react-router-dom'
-import AuthenticationService from '../Services/AuthenticationService'
-
+import {useMyBeersCommandApi} from '../Services/MyBeersService'
+import config from '../config'
+import {ErrorContext} from '../Components/Context/ErrorContext'
 
 const Register = (props) =>
 {
   const [username, setUsername] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const {setError} = useContext(ErrorContext);
+  const {myBeersState, executeCommand} = useMyBeersCommandApi();
 
   const handleRegister = () => {
-    AuthenticationService.register(username, email, password)
-      .then(() => {
-        props.history.push('/login');
-      })
-
+    const payload = {
+      username, email, password
+    }
+    const path = `${config.myBeerApiUrl}/user/register`
+    executeCommand(path, payload);
   }
+  
+  useEffect(() => {
+    if (myBeersState.error) {
+      setError(myBeersState.error)
+    } else if (myBeersState.data){
+     props.history.push("/login")
+    }
+  }, [myBeersState])
 
   return (
     <Box display="flex" flexDirection="column" justifyContent="center" height="80vh" alignItems="center">

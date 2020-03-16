@@ -15,7 +15,6 @@ export const useQueryApi = (manual = true) =>
   const executeQuery = (path) =>
   {
     const requestOptions = {
-      method: 'GET',
       headers: authHeader()
     }
     setQueryState({ ...queryState, loading: true })
@@ -39,14 +38,14 @@ export const useQueryApi = (manual = true) =>
 
 }
 
-export const useUpdateApi = (manual) => {
-  const [updateState, setState] = useState({
+export const useMyBeersCommandApi = (manual) => {
+  const [myBeersState, setMyBeersState] = useState({
     data: null,
     error: undefined,
     loading: false
   });
   
-  const executeUpdate = (path, payLoad) =>
+  const executeCommand = (path, payLoad) =>
   {
     const authenticationHead = authHeader();
     
@@ -55,24 +54,24 @@ export const useUpdateApi = (manual) => {
       data: {...payLoad}
     }
 
-    setState({ ...updateState, loading: true })
+    setMyBeersState({ ...myBeersState, loading: true })
     Axios.post(path, {}, requestOptions)
-      .then(res => setState({ data: res.data, loading: false, error: undefined }))
+      .then(res => setMyBeersState({ data: res.data, loading: false, error: undefined }))
       .catch(error => {
-        setState({ data: null, loading: false, error })
         if (error.response && error.response.status === 401) {
           localStorage.removeItem('currentUser')
         }
+        error.response && setMyBeersState({ data: null, loading: false, error: error.response.data })
       })
   }
 
   useEffect(() =>
   {
-    !manual && executeUpdate()
+    !manual && executeCommand()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return {updateState,  executeUpdate};
+  return {myBeersState, executeCommand};
 }
 
 

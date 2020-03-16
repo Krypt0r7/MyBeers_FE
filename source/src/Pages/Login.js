@@ -1,31 +1,43 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { TextField, FormControl, Button, Box } from "@material-ui/core"
-import AuthenticationService from '../Services/AuthenticationService'
+import {useMyBeersCommandApi} from '../Services/MyBeersService'
 import { Link } from 'react-router-dom';
+import config from '../config';
+import {ErrorContext} from '../Components/Context/ErrorContext'
+
 
 const Login = (props) =>
 {
 
-  const [userName, setUserName] = useState();
+  const [username, setUsername] = useState();
   const [password, setPassword] = useState();
+  const {myBeersState, executeCommand} = useMyBeersCommandApi();
+  const {setError} = useContext(ErrorContext)
 
-  function handleLogin()
+  const handleLogin = () =>
   {
-
-    AuthenticationService.Login(userName, password)
-      .then((userInput) =>
-      {
-        props.history.push('/');
-      })
-
-
+    const payload = { username, password }
+    const path = `${config.myBeerApiUrl}/user/authenticate`
+    executeCommand(path, payload);
   }
+  
+  useEffect(() => {
+    if (myBeersState.error) {
+      setError(myBeersState.error)
+    }else{
+      if (myBeersState.data) {
+        localStorage.setItem("currentUser", JSON.stringify(myBeersState.data))
+        props.history.push("/")
+      }
+      
+    }
+  }, [myBeersState])
 
   return (
     <Box display="flex" flexDirection="column" justifyContent="center" height="85vh" alignItems="center">
-      <FormControl>
+     <FormControl>
         <TextField
-          onChange={(event) => setUserName(event.target.value)}
+          onChange={(event) => setUsername(event.target.value)}
           label="Username"
           type="text" />
         <TextField

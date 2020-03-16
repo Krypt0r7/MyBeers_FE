@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
-import { useQueryApi, useUpdateApi } from '../Services/MyBeersService';
+import { useQueryApi, useMyBeersCommandApi } from '../Services/MyBeersService';
 import { Card, CardMedia, Box, Typography, Button, Divider } from '@material-ui/core'
 import config from '../config';
 import RatingSummary from '../Components/Ratings/RatingSummary';
@@ -14,7 +14,7 @@ export default () =>
   const [myRating, setMyRating] = useState()
   const [dialogOpen, setDialogOpen] = useState(false)
   const [queryState, executeQuery] = useQueryApi()
-  const { updateState, executeUpdate } = useUpdateApi()
+  const { myBeersState, executeCommand } = useMyBeersCommandApi()
   const { id } = useParams();
 
   const imageStyle = {
@@ -35,28 +35,56 @@ export default () =>
     setBeer(queryState.data)
   }, [queryState.data])
 
-  useEffect(() => {
-    if (updateState.data) {
-      setBeer({...beer, ratings: [...beer.ratings.filter(rating => rating.id !== myRating.id), updateState.data].sort((a, b) => {return new Date(a.createdTime) - new Date(b.createdTime)})})
+  useEffect(() =>
+  {
+    if (myBeersState.data)
+    {
+      if (myRating)
+      {
+        setBeer({
+          ...beer, ratings: [...beer.ratings.filter(rating => rating.id !== myRating.id), myBeersState.data]
+            .sort((a, b) => { return new Date(a.createdTime) - new Date(b.createdTime) })
+        })
+      } else
+      {
+        setBeer({
+          ...beer, ratings: [...beer.ratings, myBeersState.data]
+            .sort((a, b) => { return new Date(a.createdTime) - new Date(b.createdTime) })
+        });
+      }
     }
 
-  }, [updateState.data])
+  }, [myBeersState.data])
 
-  const handleClose = () => {
+  const handleClose = () =>
+  {
     setDialogOpen(false)
   }
 
-  const handleSave = (rating, description) => {
+  const handleSave = (rating) =>
+  {
+    const thisRating = {
+      Taste: parseInt(rating.taste),
+      AfterTaste: parseInt(rating.afterTaste),
+      Chugability: parseInt(rating.chugability),
+      Value: parseInt(rating.value),
+      FirstImpression: parseInt(rating.firstImpression),
+      Description: rating.description
+    }
+    if (myRating)
+    {
+      executeCommand(`${config.myBeerApiUrl}/rating/${myRating.id}`, thisRating)
+    } else
+    {
+      console.log(rating);
 
-    if (myRating) {
-      executeUpdate(`${config.myBeerApiUrl}/rating/${myRating.id}`, {rating: parseInt(rating), description})
-    } else {
-      executeUpdate(`${config.myBeerApiUrl}/rating`, {rating: parseInt(rating), description, beerId: id})
+      executeCommand(`${config.myBeerApiUrl}/rating`, { ...thisRating, beerId: id })
     }
     setDialogOpen(false)
   }
 
-  const handleOpen = () => {
+  const handleOpen = () =>
+  {
     setDialogOpen(true);
   }
 
@@ -78,19 +106,24 @@ export default () =>
               image={beer.beerData.imageUrl} />
           </Box>
           {beer.ratings.length !== 0 && (
-          (myRating) ?
-            <RatingUserRating
-              open={handleOpen}
-              beerId={beer.id}
-              created={myRating.createdTime}
-              rating={myRating.overallRating}
-              username={myRating.user && myRating.user.username}
-              isOwner={true}/>
-            :
-            <Box display="flex" flexDirection="column" alignItems="center">
-              <Typography>You have not rated this beer!</Typography>
-              <Button variant="outlined" onClick={handleOpen}>Rate now</Button>
-            </Box>
+            (myRating) ? (
+              <>
+                <RatingUserRating
+                  beerId={beer.id}
+                  created={myRating.createdTime}
+                  rating={myRating}
+                  username={myRating.user && myRating.user.username}
+                  isOwner={true} />
+                <Box display="flex" justifyContent="center">
+                  <Button variant="outlined" onClick={handleOpen}>See/Change my Rating</Button>
+                </Box>
+              </>
+            )
+              :
+              <Box display="flex" flexDirection="column" alignItems="center">
+                <Typography>You have not rated this beer!</Typography>
+                <Button variant="outlined" onClick={handleOpen}>Rate now</Button>
+              </Box>
           )}
           <Box>
             {beer.ratings.length !== 0 ?
@@ -98,6 +131,9 @@ export default () =>
                 <Divider style={{ margin: "1em" }} />
                 <RatingSummary ratings={beer.ratings} />
                 <Divider style={{ margin: "1em" }} />
+                <Box display="flex" justifyContent="center">
+                  <Typography variant="h6">All user ratings</Typography>
+                </Box>
                 {beer.ratings.map(rating => (
                   <Box
                     key={rating.id}
@@ -105,9 +141,9 @@ export default () =>
                     <RatingUserRating
                       username={rating.user && rating.user.username}
                       created={rating.createdTime}
-                      rating={rating.overallRating} />
+                      rating={rating} />
                     {rating.description &&
-                      <Typography style={{margin: ".5em 0"}}>"{rating.description}"</Typography>
+                      <Typography style={{ margin: ".5em 0" }}>"{rating.description}"</Typography>
                     }
                   </Box>
                 ))}
