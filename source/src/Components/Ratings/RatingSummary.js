@@ -26,7 +26,7 @@ export default ({ ratings }) =>
     {
 
       let average = 0;
-      ratings.map(rating => {
+      ratings.forEach(rating => {
         average += rating.overallRating;
       })
       
@@ -34,7 +34,7 @@ export default ({ ratings }) =>
     }
 
     let allRatingsUpdated = { ...allRatings }
-    ratings.map((rating) =>
+    ratings.forEach((rating) =>
     {
       allRatingsUpdated.taste += rating.taste;
       allRatingsUpdated.aftertaste += rating.afterTaste;
