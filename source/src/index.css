@@ -105,3 +105,20 @@ a {
 .margin-bottom {
   margin-bottom: 2em;
 }
+
+.topList{
+  width: 100%;
+}
+
+.goldenStar{
+  background-color: gold;
+}
+
+.top-list-text{
+  line-height: 2 !important; 
+  margin-left: .7em !important;
+}
+
+.cardMargin{
+  margin: .5em;
+}
