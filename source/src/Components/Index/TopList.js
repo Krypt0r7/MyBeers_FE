@@ -9,7 +9,7 @@ export default ({data}) => {
       <List className="topList">
           {data && data.map((beer, index) =>
           (
-            <Link to={`/mybeers/${beer.id}`}>
+            <Link key={index} to={`/mybeers/${beer.id}`}>
               <TopListItem image={beer.beerData.imageUrl} index={index} name={beer.beerData.productName} />
             </Link>
           ))

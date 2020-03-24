@@ -18,6 +18,7 @@ import SearchProvider from '../Context/SearchContext';
 import ErrorDisplayBoundry from '../Context/ErrorContext';
 import ErrorSnackbar from '../Generic/ErrorSnackBar';
 import ProtectedRoute from '../Generic/ProtectedRoute';
+import UpcomingReleases from '../../Pages/UpcomingReleases';
 
 function App()
 {
@@ -69,10 +70,11 @@ function App()
           <Switch>
             <Route path="/" exact component={Index} />
             <ProtectedRoute path="/mybeers" exact component={MyBeers} />
-            <ProtectedRoute path="/mybeers/:id" component={BeerDetails} />
+            <ProtectedRoute path="/beer/:id" component={BeerDetails} />
             <ProtectedRoute path="/profile" component={Profile} />
             <ProtectedRoute path="/ratings" exact component={Ratings} />
             <ProtectedRoute path="/ratings/:id" component={RatingDetails} />
+            <ProtectedRoute path="/upcoming" component={UpcomingReleases} />
             <Route path="/login" component={Login} />
             <Route path="/register" component={Register} />
             <SearchProvider>

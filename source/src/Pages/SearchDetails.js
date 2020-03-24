@@ -26,7 +26,7 @@ const SearchDetails = (props) =>
   const [open, setOpen] = useState(false);
   const { searchData } = useContext(SearchContext);
 
-  const [state, executeSearch] = useApiSearch(true)
+  const {state, executeSearch} = useApiSearch(true)
   const { myBeersState, executeCommand } = useMyBeersCommandApi(true)
 
   const searchResult = searchData && searchData.find(beer => parseInt(beer.productNumber) === id)

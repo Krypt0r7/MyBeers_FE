@@ -122,3 +122,40 @@ a {
 .cardMargin{
   margin: .5em;
 }
+
+.ratingListDate{
+  white-space: nowrap;
+}
+
+.text-input-with-icon{
+  display: flex;
+  border: 1px solid;
+  border-color: rgba(70, 69, 69, .5);
+  border-radius: .5em;
+  justify-content: space-between;
+  align-items: center;
+}
+.text-input-with-icon input{
+  border: none;
+  padding: .7em;
+  outline: none;
+  font-size: 1.1em;
+  flex: 1;
+}
+
+.text-input-with-icon input:disabled{
+  background-color: #fff;
+  color: rgba(70, 69, 69, .5);
+}
+
+.text-input-with-icon svg{
+  padding: .5em;
+}
+
+.selectedRegionWrapper{
+  margin: .5em;
+}
+
+.selectRegion{
+  width: 100%;
+}

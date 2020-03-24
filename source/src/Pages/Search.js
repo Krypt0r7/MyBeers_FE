@@ -14,7 +14,7 @@ const Search = (props) =>
 
   const { searchData, setSearchData } = useContext(SearchContext);
   
-  const [state, executeSearch] = useApiSearch(true)
+  const {state, executeSearch} = useApiSearch(true)
 
   const {setError} = useContext(ErrorContext)
 

@@ -8,12 +8,6 @@ import { ErrorContext } from '../Components/Context/ErrorContext';
 import config from '../config';
 
 export default () => {
-
-  const imgStyle = {
-    width: "100%",
-    height: "100%",
-    backgroundSize: "contain"
-  }
   const linkStyle = {
     width: "20%",
     height: "100%"
@@ -48,24 +42,21 @@ export default () => {
     <div>
       {ratings && ratings.map(rating => (
         <Card key={rating.createdTime} style={{ margin: "10px" }}>
-          <Box display="flex" margin="10px" alignItems="center" justifyContent="space-between">
-            <Box display="flex">
-              <Avatar src="" style={{ marginRight: "15px" }} />
-              <Typography variant="h6">{rating.user.username}</Typography>
+          <Link style={linkStyle} to={`/ratings/${rating.beer.id}`}>
+            <Box display="flex" justifyContent="space-between" margin="10px" >
+              <Box display="flex"  alignItems="center">
+                  <Avatar src={rating.beer.beerData.imageUrl} style={{ marginRight: "15px" }} />
+                <Box display="flex" flexDirection="column">
+                  <Typography variant="h6">{rating.user.username}</Typography>
+                  <Typography>{rating.beer.beerData.productName}</Typography>
+                </Box>
+              </Box>
+              <Box display="flex" flexDirection="column" alignItems="center">
+                <Typography className="ratingListDate" variant="caption">{formatDate(rating.createdTime)}</Typography>
+                <Rating value={rating.overallRating} precision={.1} size="small" name={rating.createdTime}/>
+              </Box>  
             </Box>
-            <Box>
-              <Typography variant="caption">rated {formatDate(rating.createdTime)}</Typography>
-            </Box>
-          </Box>
-          <Box margin="10px" display="flex" flexDirection="row" justifyContent="space-between" alignItems="center" height="60px">
-            <Box display="flex" flexDirection="column"  >
-              <Rating value={rating.overallRating} name={rating.createdTime}/>
-              <Typography>{rating.beer.beerData.productName}</Typography>
-            </Box>
-            <Link style={linkStyle} to={`/ratings/${rating.beer.id}`}>
-              <CardMedia style={imgStyle} image={rating.beer.beerData.imageUrl} />
-            </Link>
-          </Box>
+          </Link>
         </Card>
       ))}
     </div>

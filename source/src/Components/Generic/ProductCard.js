@@ -5,7 +5,7 @@ import {buildUrl} from '../../Helpers/BuildImageUrl'
 import Skeleton from '@material-ui/lab/Skeleton'
 
 
-export default ({beer, linkDestination}) =>
+export default ({beer, linkDestination, rate = false}) =>
 {
 
   const urlBuilder = () => {
@@ -27,11 +27,16 @@ export default ({beer, linkDestination}) =>
           <Typography variant='body2'>{beer.type}</Typography>
         </CardContent>
         <CardActions className='card-actions'>
-          <Button size="small" style={{ color: '#28435C' }}>
+          <Button size="small">
             <Link to={linkDestination}>
               Show beer
             </Link>
           </Button>
+          {rate &&
+            <Button size="small" >
+              <Link to={`/ratings/${beer.id}`}>Rate it</Link>
+            </Button>
+          }
         </CardActions>
       </div>
     </Card>

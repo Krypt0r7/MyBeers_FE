@@ -24,6 +24,6 @@ export const useApiSearch = (manual = false) =>
     !manual && executeSearch()
   }, [executeSearch, manual]);
   
-  return [state, executeSearch];
+  return {state, executeSearch};
   
 }

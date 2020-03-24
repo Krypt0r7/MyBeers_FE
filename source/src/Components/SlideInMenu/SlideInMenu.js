@@ -5,6 +5,7 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import HomeIcon from '@material-ui/icons/Home'
+import NewReleaseIcon from '@material-ui/icons/NewReleases'
 import DrinkIcon from '@material-ui/icons/LocalDrink'
 import SearchIcon from '@material-ui/icons/Search'
 import RateReview from '@material-ui/icons/RateReview'
@@ -45,6 +46,12 @@ const SlideInMenu = (props) =>
             <ListItem button key="Ratings">
               <ListItemIcon><RateReview /></ListItemIcon>
               <ListItemText primary="Ratings" />
+            </ListItem>
+          </Link>
+          <Link to="/upcoming">
+            <ListItem button key="Upcoming">
+              <ListItemIcon><NewReleaseIcon /></ListItemIcon>
+              <ListItemText primary="Upcomming releases" />
             </ListItem>
           </Link>
         </List>
