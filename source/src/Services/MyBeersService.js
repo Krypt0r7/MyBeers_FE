@@ -48,7 +48,6 @@ export const useMyBeersCommandApi = (manual) => {
   const executeCommand = (path, payLoad) =>
   {
     const authenticationHead = authHeader();
-    console.log({...payLoad});
     
     const requestOptions = {
       headers: {...authenticationHead, "Content-Type": "application/json"},

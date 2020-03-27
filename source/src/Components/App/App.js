@@ -34,7 +34,7 @@ function App()
         dark: '#c6c6c6'
       },
       secondary: {
-        main: '#bdbdbd',
+        main: '#B9BAA3',
         light: '#efefef',
         dark: '#8d8d8d'
       },

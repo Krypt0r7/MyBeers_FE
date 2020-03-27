@@ -46,9 +46,9 @@ const Profile = () =>
     setOpen(false)
   }
 
-  // const handleOpenImage = () =>{
-  //   setImageOpen(true);
-  // }
+  const handleOpenImage = () =>{
+    setImageOpen(true);
+  }
   const handleCloseImage = () => {
     setImageOpen(false)
   }
@@ -68,8 +68,6 @@ const Profile = () =>
       const payload = {
         file: e.target.result
       }
-      console.log(payload);
-      
       executeCommand(`${config.myBeerApiUrl}/user/${user.id}/uploadImage`, payload)
 
     }
@@ -86,8 +84,8 @@ const Profile = () =>
       <div style={{height: "80vh"}}>
         <Box display="flex" flexDirection="column" justifyContent="space-evenly" height="100%" alignItems="center">
         <h2>Welcome {user.username}</h2>
-        <Avatar src={user.imageUrl} style={avatarStyle}/>
-        {/* <Button onClick={handleOpenImage}>Edit image</Button> */}
+        <Avatar src={user.avatarUrl} style={avatarStyle}/>
+        <Button onClick={handleOpenImage}>Edit image</Button>
           <Box display="flex" flexDirection="column" padding=".5em" height="20vh" justifyContent="space-between">
             <TextBox value={user.username} name="username" save={handleSave} />
             <TextBox value={user.email} name="email" save={handleSave}/>

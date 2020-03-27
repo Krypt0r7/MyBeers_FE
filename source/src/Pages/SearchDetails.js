@@ -47,12 +47,12 @@ const SearchDetails = (props) =>
 
   const handleAddBeer = () =>
   {
-    executeCommand(`${config.myBeerApiUrl}/user/add-beer?productNumber=${selectedBeer.productNumber}`);
+    executeCommand(`${config.myBeerApiUrl}/user/add-beer?productId=${selectedBeer.productId}`);
   }
 
   const handleSaveBeer = () =>
   {
-    executeCommand(`${config.myBeerApiUrl}/beer?productNumber=${selectedBeer.productNumber}`)
+    executeCommand(`${config.myBeerApiUrl}/beer?productId=${selectedBeer.productId}`)
   }
 
   useEffect(() => {

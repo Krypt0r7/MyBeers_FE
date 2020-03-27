@@ -1,11 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { CircularProgress, Box } from '@material-ui/core'
 import { useApiSearch } from '../Services/SystemetService'
 import { SearchContext } from '../Components/Context/SearchContext'
 import querryString from 'query-string'
 import config from '../config'
 import ProductCard from '../Components/Generic/ProductCard'
 import { ErrorContext } from '../Components/Context/ErrorContext'
+import ProgressCircle from '../Components/Generic/ProgressCircle'
+import { Box } from '@material-ui/core'
 
 
 const Search = (props) =>
@@ -59,19 +60,17 @@ const Search = (props) =>
         {/* </Link> */}
       </div>
       <div className='card-container'>
-        {!state.loading ?
+        {state.data &&
         <>
           {searchData && searchData.map(beer => (
             <Box marginBottom=".5em" key={beer.productNumber} >
-              <ProductCard beer={beer} linkDestination={`/search/${beer.productNumber}`} />
+              <ProductCard beer={beer} linkDestination={`/search/${beer.productId}`} />
             </Box>
           ))}
         </>
-        :
-        <Box display="flex" justifyContent="center" alignItems="center" height="90vh">
-          <CircularProgress color="secondary" size="100" />
-        </Box>
+        
         }
+        <ProgressCircle show={state.loading}/>
       </div>
     </div>
   )

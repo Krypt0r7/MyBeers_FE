@@ -45,7 +45,7 @@ export default () => {
           <Link style={linkStyle} to={`/ratings/${rating.beer.id}`}>
             <Box display="flex" justifyContent="space-between" margin="10px" >
               <Box display="flex"  alignItems="center">
-                  <Avatar src={rating.beer.beerData.imageUrl} style={{ marginRight: "15px" }} />
+                  <Avatar src={rating.user.avatarUrl} style={{ marginRight: "15px" }} />
                 <Box display="flex" flexDirection="column">
                   <Typography variant="h6">{rating.user.username}</Typography>
                   <Typography>{rating.beer.beerData.productName}</Typography>
