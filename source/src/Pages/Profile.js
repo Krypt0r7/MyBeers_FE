@@ -6,9 +6,6 @@ import { Button, Box, Avatar } from '@material-ui/core'
 import { useMyBeersCommandApi } from '../Services/MyBeersService';
 import TextBox from '../Components/Profile/TextBox'
 import ImageEdit from '../Components/Profile/ImageEdit'
-// import Axios from 'axios'
-// import { authHeader } from '../Helpers/AuthenticationHeader'
-// import FormData from 'form-data'
 
 const Profile = () =>
 {
@@ -25,11 +22,11 @@ const Profile = () =>
     marginTop: "1em"
   }
 
-
   useEffect(() =>
   {
     const user = JSON.parse(localStorage.getItem('currentUser'));
     executeQuery(`${config.myBeerApiUrl}/user/${user.id}`)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {

@@ -1,10 +1,11 @@
 import { authHeader } from '../Helpers/AuthenticationHeader'
 import Axios from 'axios'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
+import {ErrorContext} from '../Components/Context/ErrorContext'
 
 export const useQueryApi = (manual = true) =>
 {
-
+  const { setError } = useContext(ErrorContext);
   const [queryState, setQueryState] = useState({
     data: null,
     error: undefined,
@@ -24,6 +25,8 @@ export const useQueryApi = (manual = true) =>
         setQueryState({ data: null, loading: false, error })
         if (error.response && error.response.status === 401) {
           localStorage.removeItem('currentUser')
+          window.location.href = "/login"
+          setError("You need to login")
         }
       })
   }
@@ -39,6 +42,7 @@ export const useQueryApi = (manual = true) =>
 }
 
 export const useMyBeersCommandApi = (manual) => {
+  const {setError} = useContext(ErrorContext)
   const [myBeersState, setMyBeersState] = useState({
     data: null,
     error: undefined,
@@ -60,6 +64,8 @@ export const useMyBeersCommandApi = (manual) => {
       .catch(error => {
         if (error.response && error.response.status === 401) {
           localStorage.removeItem('currentUser')
+          window.location.href = '/login'
+          setError("Need to login")
         }
         error.response && setMyBeersState({ data: null, loading: false, error: error.response.data })
       })

@@ -57,6 +57,7 @@ const SearchDetails = (props) =>
 
   useEffect(() => {
     myBeersState.data && props.history.push(`/ratings/${myBeersState.data.id}`)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [myBeersState.data])
 
 

@@ -53,7 +53,7 @@ export default () =>
         });
       }
     }
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [myBeersState.data])
 
   const handleClose = () =>
@@ -110,6 +110,7 @@ export default () =>
               <>
                 <RatingUserRating
                   beerId={beer.id}
+                  image={myRating.user.avatarUrl}
                   created={myRating.createdTime}
                   rating={myRating}
                   username={myRating.user && myRating.user.username}
@@ -139,6 +140,7 @@ export default () =>
                     key={rating.id}
                     margin="1em 0">
                     <RatingUserRating
+                      image={rating.user.avatarUrl}
                       username={rating.user && rating.user.username}
                       created={rating.createdTime}
                       rating={rating} />

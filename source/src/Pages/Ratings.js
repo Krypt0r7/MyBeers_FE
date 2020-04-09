@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { Card, Box, Avatar, Typography, CardMedia } from '@material-ui/core';
+import { Card, Box, Avatar, Typography } from '@material-ui/core';
 import Rating from '@material-ui/lab/Rating';
 import { Link } from 'react-router-dom';
 import moment from 'moment';

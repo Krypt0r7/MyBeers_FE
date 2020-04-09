@@ -12,6 +12,7 @@ export default () =>
   useEffect(() =>
   {
     executeQuery(`${config.myBeerApiUrl}/beer/best`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

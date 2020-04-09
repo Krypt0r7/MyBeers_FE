@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { useParams } from "react-router"
-import { useQueryApi, useMyBeersCommandApi } from '../Services/MyBeersService';
+import { useQueryApi } from '../Services/MyBeersService';
 import config from '../config';
 import { ErrorContext } from '../Components/Context/ErrorContext';
 import { Card, CardMedia, Typography, Box, CardActions, Button, CircularProgress } from '@material-ui/core';
@@ -23,7 +23,6 @@ export default () => {
     marginBottom: ".5em"
   }
   
-  const {executeCommand} = useMyBeersCommandApi()
   const [queryState, executeQuery] = useQueryApi()
   const [beer, setBeer] = useState();
   const {setError} = useContext(ErrorContext)
@@ -41,11 +40,6 @@ export default () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queryState])
 
-  const handleDelete = async (id) =>
-  {
-    executeCommand(`${config.myBeerApiUrl}/user/remove-beer?beerId=${id}`);
-    // queryState.error && setError(queryState.error)    
-  }
   
   return (
     <>
@@ -57,7 +51,7 @@ export default () => {
               </Box>
             </CardMedia>
             <Typography style={sectionStyle} variant="overline" >{beer.beerData.beverageDescriptionShort}</Typography>
-            <Typography variant="h5">{beer.productName}</Typography>
+            <Typography variant="h5">{beer.beerData.productName}</Typography>
             <Typography style={sectionStyle} variant="caption">Tillverkad i {beer.beerData.country}, {beer.beerData.originLevel1}, {beer.beerData.originLevel2}</Typography>
             <Box margin=".5em 0" display="flex" flexDirection="row" justifyContent="space-evenly">
               <Typography variant="h5">{String(beer.beerData.price).split('.').join(':') + '0 kr'}</Typography>
@@ -80,7 +74,6 @@ export default () => {
             </Box>
             <CardActions style={{padding: 0}}>
               <Box justifyContent="space-between" display="flex" width="100%">
-                <Button onClick={() => handleDelete(beer.id)}  variant="contained">Remove</Button>
                 <Button variant="outlined">
                   <Link to={`/ratings/${beer.id}`} >
                     See/add ratings

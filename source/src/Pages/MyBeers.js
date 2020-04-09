@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { useQueryApi } from '../Services/MyBeersService'
+import { useQueryApi, useMyBeersCommandApi } from '../Services/MyBeersService'
 import { ErrorContext } from '../Components/Context/ErrorContext';
 import config from '../config'
 import ProductCard from '../Components/Generic/ProductCard';
@@ -9,8 +9,15 @@ const MyBeers = () =>
 {
   const [beers, setBeers] = useState();
   const { setError } = useContext(ErrorContext);
-
+  
+  const {executeCommand} = useMyBeersCommandApi(true);
   const [queryState, executeQuery] = useQueryApi(true)
+
+  const handleDelete = async (id) =>
+  {
+    executeCommand(`${config.myBeerApiUrl}/user/remove-beer?beerId=${id}`);    
+    setBeers(beers.filter(x => x.id !== id))
+  }
 
   useEffect(() =>
   {
@@ -29,7 +36,7 @@ const MyBeers = () =>
     <div className='card-container'>
       {beers && beers.map((beer) => (
         <Box marginBottom=".5em" key={beer.id}>
-          <ProductCard rate={true} beer={beer.beerData} beerId={beer.id} linkDestination={`/beer/${beer.id}`} />
+          <ProductCard rate={true} beer={beer.beerData} beerId={beer.id} linkDestination={`/beer/${beer.id}`} remove={handleDelete} />
         </Box>
       ))}
     </div>

@@ -14,11 +14,12 @@ const Login = (props) =>
   const { myBeersState, executeCommand } = useMyBeersCommandApi();
   const { setError } = useContext(ErrorContext)
 
-  const handleLogin = () =>
+  const handleLogin = event =>
   {
     const payload = { username, password }
     const path = `${config.myBeerApiUrl}/user/authenticate`
     executeCommand(path, payload);
+    event.preventDefault()
   }
 
   useEffect(() =>
@@ -26,30 +27,29 @@ const Login = (props) =>
     if (myBeersState.error)
     {
       setError(myBeersState.error)
-    } else
+    } else if (myBeersState.data)
     {
-      if (myBeersState.data)
-      {
-        localStorage.setItem("currentUser", JSON.stringify(myBeersState.data))
-        props.history.push("/")
-      }
-
+      localStorage.setItem("currentUser", JSON.stringify(myBeersState.data))
+      props.history.goBack()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [myBeersState])
 
   return (
     <Box display="flex" flexDirection="column" justifyContent="center" height="85vh" alignItems="center">
-      <FormControl>
-        <TextField
-          onChange={(event) => setUsername(event.target.value)}
-          label="Username"
-          type="text" />
-        <TextField
-          onChange={(event) => setPassword(event.target.value)}
-          label="Password"
-          type="password" />
-        <Button onClick={handleLogin} >Sign in</Button>
-      </FormControl>
+      <form onSubmit={handleLogin}>
+        <FormControl>
+          <TextField
+            onChange={(event) => setUsername(event.target.value)}
+            label="Username"
+            type="text" />
+          <TextField
+            onChange={(event) => setPassword(event.target.value)}
+            label="Password"
+            type="password" />
+          <Button type="submit">Sign in</Button>
+        </FormControl>
+      </form>
       <Link to="/register">I don't have an account!</Link>
     </Box>
   );

@@ -2,10 +2,9 @@ import React from 'react'
 import { Card, CardMedia, CardContent, Typography, CardActions, Button } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import {buildUrl} from '../../Helpers/BuildImageUrl'
-import Skeleton from '@material-ui/lab/Skeleton'
 
 
-export default ({beer, beerId, linkDestination, rate = false}) =>
+export default ({beer, beerId, linkDestination, remove, rate = false}) =>
 {
   const urlBuilder = () => {
     return buildUrl(beer.productId)
@@ -27,10 +26,13 @@ export default ({beer, beerId, linkDestination, rate = false}) =>
               Show beer
             </Link>
           </Button>
-          {rate &&
+          {rate && 
+          <>
             <Button size="small" >
               <Link to={`/ratings/${beerId}`}>Rate it</Link>
             </Button>
+            <Button onClick={() => remove(beerId)}>Remove</Button>
+          </>
           }
         </CardActions>
       </div>

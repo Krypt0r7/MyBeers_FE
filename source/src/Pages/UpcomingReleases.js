@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Box, CircularProgress } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 import { useApiSearch } from '../Services/SystemetService'
 import config from '../config';
 import ProductCard from '../Components/Generic/ProductCard';
@@ -10,7 +10,7 @@ export default () => {
 
   const {state, executeSearch} = useApiSearch(true);
 
-  const [selected, setSelected] = useState();
+  const [selected, setSelected] = useState("");
   
   const handleChange = (name) => {
     localStorage.setItem('selectedRegion', name);
@@ -22,6 +22,7 @@ export default () => {
     const region = localStorage.getItem('selectedRegion')
     setSelected(region);
     executeSearch(`${config.myBeerApiUrl}/systemet/news/?${region ? 'region=' + region : ''}`) 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

@@ -1,0 +1,62 @@
+[
+  {
+    "eng": "Sweden",
+    "swe": "Sverige",
+    "short": "SE",
+    "regions": [
+      "Västra Götalands län",
+      "Stockholms län",
+      "Skåne län",
+      "Gotlands län",
+      "Blekinge län",
+      "Gävleborgs län",
+      "Hallands län",
+      "Jämtlands län",
+      "Kalmar län",
+      "Kronobergs län",
+      "Norrbottens län",
+      "Södermanlands län",
+      "Uppsala län",
+      "Värmlands län",
+      "Västerbottens län",
+      "Västernorrlands län",
+      "Västmanlands län",
+      "Örebro län",
+      "Östergötlands län"
+    ]
+  },
+  {
+    "eng": "Denmark",
+    "swe": "Danmark",
+    "short": "DK"
+  },
+  {
+    "eng": "Great Britain",
+    "swe": "Storbritanien",
+    "short": "GB",
+    "regions": [
+      "England",
+      "Scottland"
+    ]
+  },
+  {
+    "eng": "Germany",
+    "swe": "Tyskland",
+    "short": "DE"
+  },
+  {
+    "eng": "Czech rebublic",
+    "swe": "Tjeckien",
+    "short": "CZ"
+  },
+  {
+    "eng": "USA",
+    "swe": "USA",
+    "short": "US"
+  },
+  {
+    "eng": "Belgium",
+    "swe": "Belgien",
+    "short": "BE"
+  }
+]
