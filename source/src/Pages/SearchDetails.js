@@ -55,6 +55,14 @@ const SearchDetails = (props) =>
     executeCommand(`${config.myBeerApiUrl}/beer?productId=${selectedBeer.productId}`)
   }
 
+  const priceFormatter = (price) => {
+
+    if (price.toString().includes('.')) {
+      return String(price).split('.').join(':') + '0 kr'
+    }
+    return price + " kr";
+  }
+
   useEffect(() => {
     myBeersState.data && props.history.push(`/ratings/${myBeersState.data.id}`)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -82,7 +90,7 @@ const SearchDetails = (props) =>
           <Typography variant="h5">{selectedBeer.productName}</Typography>
           <Typography style={sectionStyle} variant="caption">Tillverkad i {selectedBeer.country}, {selectedBeer.originLevel1}, {selectedBeer.originLevel2}</Typography>
           <Box margin=".5em 0" display="flex" flexDirection="row" justifyContent="space-evenly">
-            <Typography variant="h5">{String(selectedBeer.price).split('.').join(':') + '0 kr'}</Typography>
+            <Typography variant="h5">{priceFormatter(selectedBeer.price)}</Typography>
             <VerticalLine />
             <Typography variant="h5">{selectedBeer.volume} ml</Typography>
             <VerticalLine />

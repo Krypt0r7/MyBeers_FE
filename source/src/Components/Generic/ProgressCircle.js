@@ -6,7 +6,7 @@ export default ({show}) => {
     return null;
   return (
     <Box position="fixed" top="50%" left="50%" marginTop="-45px" marginLeft="-45px" >
-      <CircularProgress color="secondary" thickness={4.5} size="70px" />
+      <CircularProgress color="primary" thickness={4.5} size="70px" />
     </Box>
   )
 }

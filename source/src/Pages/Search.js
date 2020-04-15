@@ -102,7 +102,7 @@ const Search = (props) =>
         }
         <ProgressCircle show={state.loading}/>
       </div>
-      <Fab style={fabStyle} color="primary" onClick={handleFilterOpen} title="Advanced search">
+      <Fab style={fabStyle} color="secondary" onClick={handleFilterOpen} title="Advanced search">
         <img alt="Advanced search icon" style={iconStyle} src={process.env.PUBLIC_URL + "/advanced.png"} />
       </Fab>
       <AdvancedSearchDialog open={open} search={handleAdvancedSearch} data={advancedSearch} setData={setAdvancedSearch}/> 

@@ -7,7 +7,8 @@ import { useQueryApi } from '../Services/MyBeersService';
 import { ErrorContext } from '../Components/Context/ErrorContext';
 import config from '../config';
 
-export default () => {
+export default () =>
+{
   const linkStyle = {
     width: "20%",
     height: "100%"
@@ -15,7 +16,7 @@ export default () => {
 
   const [queryState, executeQuery] = useQueryApi(true);
   const [ratings, setRatings] = useState(null);
-  const {setError} = useContext(ErrorContext);
+  const { setError } = useContext(ErrorContext);
 
   useEffect(() =>
   {
@@ -44,8 +45,8 @@ export default () => {
         <Card key={rating.createdTime} style={{ margin: "10px" }}>
           <Link style={linkStyle} to={`/ratings/${rating.beer.id}`}>
             <Box display="flex" justifyContent="space-between" margin="10px" >
-              <Box display="flex"  alignItems="center">
-                  <Avatar src={rating.user.avatarUrl} style={{ marginRight: "15px" }} />
+              <Box display="flex" alignItems="center">
+                <Avatar src={rating.user.avatarUrl} style={{ marginRight: "15px" }} />
                 <Box display="flex" flexDirection="column">
                   <Typography variant="h6">{rating.user.username}</Typography>
                   <Typography>{rating.beer.beerData.productName}</Typography>
@@ -53,8 +54,8 @@ export default () => {
               </Box>
               <Box display="flex" flexDirection="column" alignItems="center">
                 <Typography className="ratingListDate" variant="caption">{formatDate(rating.createdTime)}</Typography>
-                <Rating value={rating.overallRating} precision={.1} size="small" name={rating.createdTime}/>
-              </Box>  
+                <Rating value={rating.overallRating} readOnly precision={.1} size="small" name={rating.createdTime} />
+              </Box>
             </Box>
           </Link>
         </Card>

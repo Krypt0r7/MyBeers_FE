@@ -11,7 +11,7 @@ const MenuBar = (props) =>
 
   return (
     <div>
-      <AppBar position='static'>
+      <AppBar position='static' color="default">
         <Toolbar>
           <IconButton onClick={props.open(true)} edge='start' color='inherit'>
             <MenuIcon />

@@ -3,84 +3,101 @@ import { useParams } from "react-router"
 import { useQueryApi } from '../Services/MyBeersService';
 import config from '../config';
 import { ErrorContext } from '../Components/Context/ErrorContext';
-import { Card, CardMedia, Typography, Box, CardActions, Button, CircularProgress } from '@material-ui/core';
+import { Card, CardMedia, Typography, Box, Button, CircularProgress, Fab } from '@material-ui/core';
 import Rating from '@material-ui/lab/Rating';
+import AddIcon from '@material-ui/icons/Add'
 import Ribbon from '../Components/Generic/Ribbon';
 import VerticalLine from '../Components/Generic/VerticalLine';
 import { Link } from 'react-router-dom';
 
 
-export default () => {
+const BeerDetails = () =>
+{
 
-  
+
   const contentStyle = {
     height: "55vh",
     backgroundSize: "contain",
     marginBottom: "1em"
   }
-  
+
   const sectionStyle = {
     marginBottom: ".5em"
   }
-  
+
   const [queryState, executeQuery] = useQueryApi()
   const [beer, setBeer] = useState();
-  const {setError} = useContext(ErrorContext)
-  
-  const {id} = useParams();
-  
-  useEffect(() => {
+  const { setError } = useContext(ErrorContext)
+
+  const { id } = useParams();
+
+  useEffect(() =>
+  {
     executeQuery(`${config.myBeerApiUrl}/beer/${id}`)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
-  
-  useEffect(() => {
+  }, [])
+
+  useEffect(() =>
+  {
     setBeer(queryState.data)
-    queryState.error &&  setError(queryState.error.response)
+    queryState.error && setError(queryState.error.response)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queryState])
 
-  
+  const priceFormatter = (price) =>
+  {
+
+    if (price.toString().includes('.'))
+    {
+      return String(price).split('.').join(':') + '0 kr'
+    }
+    return price + " kr";
+  }
+
+
   return (
     <>
       {beer ?
-        <Card className="details-card" style={{position: "relative"}}>
-            <CardMedia image={beer.beerData.imageUrl} style={contentStyle}>
-              <Box width="100%" height="100%">
-                <Ribbon text={"YPK: " + beer.ypk} />
-              </Box>
-            </CardMedia>
-            <Typography style={sectionStyle} variant="overline" >{beer.beerData.beverageDescriptionShort}</Typography>
-            <Typography variant="h5">{beer.beerData.productName}</Typography>
-            <Typography style={sectionStyle} variant="caption">Tillverkad i {beer.beerData.country}, {beer.beerData.originLevel1}, {beer.beerData.originLevel2}</Typography>
-            <Box margin=".5em 0" display="flex" flexDirection="row" justifyContent="space-evenly">
-              <Typography variant="h5">{String(beer.beerData.price).split('.').join(':') + '0 kr'}</Typography>
-              <VerticalLine />
-              <Typography variant="h5">{beer.beerData.volume} ml</Typography>
-              <VerticalLine />
-              <Typography variant="h5">{beer.beerData.alcoholPercentage} %</Typography>
+        <Card className="details-card" style={{ position: "relative" }}>
+          <CardMedia image={beer.beerData.imageUrl} style={contentStyle}>
+            <Box width="100%" height="100%">
+              <Ribbon text={"YPK: " + beer.ypk} />
             </Box>
-            <Typography style={sectionStyle} variant="body1">{beer.beerData.taste}</Typography>
-            <Box display="flex" flexDirection="row" justifyContent="flex-end" padding="0 0 5px 0">
+          </CardMedia>
+          <Typography style={sectionStyle} variant="overline" >{beer.beerData.beverageDescriptionShort}</Typography>
+          <Typography variant="h5">{beer.beerData.productName}</Typography>
+          <Typography style={sectionStyle} variant="caption">Brewed in {beer.beerData.country}, {beer.beerData.originLevel1}, {beer.beerData.originLevel2}</Typography>
+          <Box margin=".5em 0" display="flex" flexDirection="row" justifyContent="space-evenly">
+            <Typography variant="h5">{priceFormatter(beer.beerData.price)}</Typography>
+            <VerticalLine />
+            <Typography variant="h5">{beer.beerData.volume} ml</Typography>
+            <VerticalLine />
+            <Typography variant="h5">{beer.beerData.alcoholPercentage} %</Typography>
+          </Box>
+          <Typography style={sectionStyle} variant="body1">{beer.beerData.taste}</Typography>
+          <Box display="flex" justifyContent="space-between" alignItems="center">
+            <Box display="flex" flexDirection="column" alignItems="start" padding="0 0 5px 0">
               <Box display="flex" flexDirection="column">
                 {beer.rating && (
-                <>
-                  <Typography variant="body1">My rating:</Typography>
-                  <Rating name="overallRating" value={beer.rating ? beer.rating.overallRating : 0} />
-                </>
-                )
-                }
+                  <>
+                    <Typography variant="body1">My rating:</Typography>
+                    <Rating name="overallRating" value={beer.rating ? beer.rating.overallRating : 0} />
+                  </>
+                )}
               </Box>
+              <Button variant="outlined">
+                <Link to={`/ratings/${beer.id}`} >See ratings</Link>
+              </Button>
             </Box>
-            <CardActions style={{padding: 0}}>
-              <Box justifyContent="space-between" display="flex" width="100%">
-                <Button variant="outlined">
-                  <Link to={`/ratings/${beer.id}`} >
-                    See/add ratings
-                  </Link>
-                </Button>
-              </Box>
-            </CardActions>
+            <div></div>
+            {/* <Fab
+              variant="extended"
+              size="large"
+              aria-label="add">
+              <AddIcon />
+              Add to list
+            </Fab> */}
+          </Box>
         </Card>
         :
         <Box display="flex" justifyContent="center" alignItems="center" height="90vh">
@@ -91,3 +108,5 @@ export default () => {
     </>
   )
 }
+
+export default BeerDetails

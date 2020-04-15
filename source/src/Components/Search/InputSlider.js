@@ -27,7 +27,6 @@ const InputSlider = ({ value, name, label, change, style, max = 100 }) =>
           style={inputStyle}
           value={typeof value === "number" ? value : 0}
           onChange={handleSliderChange}
-          color="secondary"
           max={max}
         />
         <Input

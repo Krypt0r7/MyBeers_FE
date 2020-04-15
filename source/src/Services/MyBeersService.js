@@ -2,6 +2,7 @@ import { authHeader } from '../Helpers/AuthenticationHeader'
 import Axios from 'axios'
 import { useEffect, useState, useContext } from 'react'
 import {ErrorContext} from '../Components/Context/ErrorContext'
+import RatingAverageInSpecific from '../Components/Ratings/RatingAverageInSpecific'
 
 export const useQueryApi = (manual = true) =>
 {
@@ -27,6 +28,9 @@ export const useQueryApi = (manual = true) =>
           localStorage.removeItem('currentUser')
           window.location.href = "/login"
           setError("You need to login")
+        }else if(error.response && error.response.status === 400){
+          setError(error.response.data)
+          
         }
       })
   }
@@ -63,10 +67,16 @@ export const useMyBeersCommandApi = (manual) => {
       .then(res => setMyBeersState({ data: res.data, loading: false, error: undefined }))
       .catch(error => {
         if (error.response && error.response.status === 401) {
+          console.log("test");
+          
           localStorage.removeItem('currentUser')
-          window.location.href = '/login'
           setError("Need to login")
+          window.location.href = '/login'
         }
+        else if(error.response && error.response.status === 400) {
+          setError(error.response.data)
+        }
+        
         error.response && setMyBeersState({ data: null, loading: false, error: error.response.data })
       })
   }

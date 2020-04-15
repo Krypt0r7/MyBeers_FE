@@ -76,8 +76,6 @@ export default () =>
       executeCommand(`${config.myBeerApiUrl}/rating/${myRating.id}`, thisRating)
     } else
     {
-      console.log(rating);
-
       executeCommand(`${config.myBeerApiUrl}/rating`, { ...thisRating, beerId: id })
     }
     setDialogOpen(false)

@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { useQueryApi } from '../Services/MyBeersService'
 import config from '../config'
 import ChangePasswordDialog from '../Components/Profile/ChangePasswordDialog'
-import { Button, Box, Avatar } from '@material-ui/core'
+import { Button, Box, Avatar, Typography } from '@material-ui/core'
 import { useMyBeersCommandApi } from '../Services/MyBeersService';
 import TextBox from '../Components/Profile/TextBox'
 import ImageEdit from '../Components/Profile/ImageEdit'
+import { Link } from 'react-router-dom'
 
 const Profile = () =>
 {
@@ -81,6 +82,7 @@ const Profile = () =>
       <div style={{height: "80vh"}}>
         <Box display="flex" flexDirection="column" justifyContent="space-evenly" height="100%" alignItems="center">
         <h2>Welcome {user.username}</h2>
+        <Link to={`/profile/${user.username}`}><Typography variant="button">See my stats</Typography></Link>
         <Avatar src={user.avatarUrl} style={avatarStyle}/>
         <Button onClick={handleOpenImage}>Edit image</Button>
           <Box display="flex" flexDirection="column" padding=".5em" height="20vh" justifyContent="space-between">

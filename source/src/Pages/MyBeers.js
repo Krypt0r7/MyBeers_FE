@@ -36,7 +36,7 @@ const MyBeers = () =>
     <div className='card-container'>
       {beers && beers.map((beer) => (
         <Box marginBottom=".5em" key={beer.id}>
-          <ProductCard rate={true} beer={beer.beerData} beerId={beer.id} linkDestination={`/beer/${beer.id}`} remove={handleDelete} />
+          <ProductCard rate={true} beer={beer.beerData} beerId={beer.id} linkDestination={`/beer/${beer.id}`} remove={() => handleDelete()} />
         </Box>
       ))}
     </div>
