@@ -7,6 +7,7 @@ import { useMyBeersCommandApi } from '../Services/MyBeersService';
 import TextBox from '../Components/Profile/TextBox'
 import ImageEdit from '../Components/Profile/ImageEdit'
 import { Link } from 'react-router-dom'
+import Axios from 'axios'
 
 const Profile = () =>
 {
@@ -59,16 +60,20 @@ const Profile = () =>
 
   const handleSaveImage = async input => {
 
-    let reader = new FileReader();
-    reader.readAsDataURL(input);
+    let bodyFormData = new FormData();
+    bodyFormData.append('image', input)
 
-    reader.onload = (e) => {
-      const payload = {
-        file: e.target.result
-      }
-      executeCommand(`${config.myBeerApiUrl}/user/${user.id}/uploadImage`, payload)
-
-    }
+    Axios({
+      method: 'POST',
+      url: `http://localhost:51210/user/${user.id}/uploadImage`,
+      data: bodyFormData,
+      headers: {'Content-Type': 'multipart/form-data'}
+    }).then((resp) => {
+      console.log(resp);
+    }).then((resp) => {
+      console.log(resp);
+    })
+   
   }
 
   useEffect(() => {
