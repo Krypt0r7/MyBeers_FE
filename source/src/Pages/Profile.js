@@ -8,6 +8,7 @@ import TextBox from '../Components/Profile/TextBox'
 import ImageEdit from '../Components/Profile/ImageEdit'
 import { Link } from 'react-router-dom'
 import Axios from 'axios'
+import { multiPartHeader } from '../Helpers/AuthenticationHeader'
 
 const Profile = () =>
 {
@@ -67,7 +68,7 @@ const Profile = () =>
       method: 'POST',
       url: `http://localhost:51210/user/${user.id}/uploadImage`,
       data: bodyFormData,
-      headers: {'Content-Type': 'multipart/form-data'}
+      headers: multiPartHeader()
     }).then((resp) => {
       console.log(resp);
     }).then((resp) => {
