@@ -66,7 +66,7 @@ const Profile = () =>
 
     Axios({
       method: 'POST',
-      url: `http://localhost:51210/user/${user.id}/uploadImage`,
+      url: `${config.myBeerApiUrl}/user/${user.id}/uploadImage`,
       data: bodyFormData,
       headers: multiPartHeader()
     }).then((resp) => {
