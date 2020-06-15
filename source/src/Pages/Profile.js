@@ -7,17 +7,14 @@ import { useMyBeersCommandApi } from '../Services/MyBeersService';
 import TextBox from '../Components/Profile/TextBox'
 import ImageEdit from '../Components/Profile/ImageEdit'
 import { Link } from 'react-router-dom'
-import Axios from 'axios'
-import { multiPartHeader } from '../Helpers/AuthenticationHeader'
 
 const Profile = () =>
 {
-  const { myBeersState, executeCommand } = useMyBeersCommandApi();
+  const { executeCommand } = useMyBeersCommandApi();
   const [queryState, executeQuery] = useQueryApi(true)
   const [open, setOpen] = useState(false);
   const [imageOpen, setImageOpen] = useState(false);
   const [user, setUser] = useState();
-
 
   const avatarStyle = {
     height: "9em",
@@ -27,10 +24,14 @@ const Profile = () =>
 
   useEffect(() =>
   {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    executeQuery(`${config.myBeerApiUrl}/user/${user.id}`)
+    getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+  
+  const getData = () => {
+    const userData = JSON.parse(localStorage.getItem('currentUser'));
+    executeQuery(`${config.myBeerApiUrl}/user/getuser/?id=${userData.id}`)
+  }
 
   useEffect(() => {
     queryState.data && setUser(queryState.data)
@@ -53,33 +54,18 @@ const Profile = () =>
     setImageOpen(false)
   }
 
-  const handleSave = (input, name) => {
-    const payload = {[name]: input}
-    executeCommand(`${config.myBeerApiUrl}/user/${user.id}/update`, payload)
+  const handleSave = () => {
+    const payload = { username: user.username, email: user.email, id: user.id }
+    executeCommand(`${config.myBeerApiUrl}/user/update`, payload)
+    setTimeout(() => getData(), 1);
   }
   
 
   const handleSaveImage = async input => {
-
-    let bodyFormData = new FormData();
-    bodyFormData.append('image', input)
-
-    Axios({
-      method: 'POST',
-      url: `${config.myBeerApiUrl}/user/${user.id}/uploadImage`,
-      data: bodyFormData,
-      headers: multiPartHeader()
-    }).then((resp) => {
-      console.log(resp);
-    }).then((resp) => {
-      console.log(resp);
-    })
-   
+    const payload = {id: user.id, imageData: input }
+    executeCommand(`${config.myBeerApiUrl}/user/uploadavatar`, payload)
+    setTimeout(() => getData(), 1)
   }
-
-  useEffect(() => {
-    myBeersState.data && setUser(myBeersState.data)
-  }, [myBeersState.data])
 
 
   return (
@@ -87,13 +73,13 @@ const Profile = () =>
       {user &&
       <div style={{height: "80vh"}}>
         <Box display="flex" flexDirection="column" justifyContent="space-evenly" height="100%" alignItems="center">
-        <h2>Welcome {user.username}</h2>
-        <Link to={`/profile/${user.username}`}><Typography variant="button">See my stats</Typography></Link>
+        <h2>Welcome {queryState.data.username}</h2>
+        <Link to={`/profile/${user.id}`}><Typography variant="button">See my stats</Typography></Link>
         <Avatar src={user.avatarUrl} style={avatarStyle}/>
         <Button onClick={handleOpenImage}>Edit image</Button>
           <Box display="flex" flexDirection="column" padding=".5em" height="20vh" justifyContent="space-between">
-            <TextBox value={user.username} name="username" save={handleSave} />
-            <TextBox value={user.email} name="email" save={handleSave}/>
+            <TextBox value={user.username} name="username" save={handleSave} state={user} setState={setUser}/>
+            <TextBox value={user.email} name="email" save={handleSave} state={user} setState={setUser}/>
           </Box>
           <Button onClick={handelOpen} >Change password</Button>
         </Box>

@@ -33,7 +33,7 @@ export default ({ ratings }) =>
       setAverageRating(Math.round((average/ ratings.length) * 10) / 10);
     }
 
-    let allRatingsUpdated = { ...allRatings }
+    let allRatingsUpdated = {taste: 0, aftertaste: 0, chugability: 0, value: 0, firstImpression: 0};
     ratings.forEach((rating) =>
     {
       allRatingsUpdated.taste += rating.taste;
@@ -49,7 +49,7 @@ export default ({ ratings }) =>
     allRatingsUpdated.firstImpression = allRatingsUpdated.firstImpression / ratings.length;
     setAllRatings(allRatingsUpdated);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [ratings]);
 
   return (
     <>

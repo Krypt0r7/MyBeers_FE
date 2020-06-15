@@ -10,7 +10,7 @@ export default ({data}) => {
           {data && data.map((beer, index) =>
           (
             <Link key={index} to={`/beer/${beer.id}`}>
-              <TopListItem image={beer.beerData.imageUrl} index={index} name={beer.beerData.productName} />
+              <TopListItem image={beer.imageUrl && beer.imageUrl} index={index} name={beer.name} rating={beer.avarageRating} />
             </Link>
           ))
           }

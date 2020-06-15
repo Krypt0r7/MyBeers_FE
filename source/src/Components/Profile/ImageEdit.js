@@ -5,8 +5,15 @@ export default ({open, handleClose, saveImage}) => {
   const [file, setFile] = useState();
   
   const handleSelected = event => {
-    setFile(event.target.files[0]);
-    
+    const file = event.target.files[0];
+    let fr = new FileReader();
+
+    fr.readAsDataURL(file)
+    fr.addEventListener("load", (e) => {
+      const string = e.target.result.replace("data:image/png;base64,", "");
+      setFile(string)
+    })
+
   }
 
   const handleSave = () => {

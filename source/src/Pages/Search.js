@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { useApiSearch } from '../Services/SystemetService'
-import { SearchContext } from '../Components/Context/SearchContext'
+import { useQueryApi } from '../Services/MyBeersService'
 import querryString from 'query-string'
 import config from '../config'
 import ProductCard from '../Components/Generic/ProductCard'
@@ -25,8 +24,7 @@ const Search = (props) =>
     searchString: ""
   })
   const [open, setOpen] = useState(false);
-  const { searchData, setSearchData } = useContext(SearchContext);
-  const {state, executeSearch} = useApiSearch(true)
+  const [queryState, executeQuery] = useQueryApi(true)
   const {setError} = useContext(ErrorContext)
 
   const fabStyle = {
@@ -45,7 +43,7 @@ const Search = (props) =>
   const handelKeyDown = (event) => {
     if (event.key === "Enter") {
       props.history.push("/search?query=" + searchText)
-      executeSearch(`${config.myBeerApiUrl}/systemet?search=${searchText}`);
+      executeQuery(`${config.myBeerApiUrl}/beer/search?searchString=${searchText}`);
     }
   }
 
@@ -61,21 +59,11 @@ const Search = (props) =>
     const param = querryString.parse(props.location.search)
     if (param.query)
     {
-      if (!searchData) {
-        executeSearch(`${config.myBeerApiUrl}/systemet?search=${param.query}`)
-      }
+      executeQuery(`${config.myBeerApiUrl}/beer/search?searchString=${param.query}`)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchData])
+  }, [])
 
-  useEffect(() => {
-    state.data && setSearchData(state.data)
-    
-    if(state.data && state.data.length === 0){
-      setError('No search result')
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.data])
 
   return (
     <div>
@@ -90,17 +78,17 @@ const Search = (props) =>
         {/* </Link> */}
       </div>
       <div className='card-container'>
-        {state.data &&
+        {queryState.data &&
         <>
-          {searchData && searchData.map(beer => (
-            <Box marginBottom=".5em" key={beer.productNumber} >
-              <ProductCard beer={beer} linkDestination={`/search/${beer.productId}`} />
+          {queryState.data.map(beer => (
+            <Box marginBottom=".5em" key={beer.id} >
+              <ProductCard beer={beer} linkDestination={`/search/${beer.id}`} />
             </Box>
           ))}
         </>
         
         }
-        <ProgressCircle show={state.loading}/>
+        <ProgressCircle show={queryState.loading}/>
       </div>
       <Fab style={fabStyle} color="secondary" onClick={handleFilterOpen} title="Advanced search">
         <img alt="Advanced search icon" style={iconStyle} src={process.env.PUBLIC_URL + "/advanced.png"} />

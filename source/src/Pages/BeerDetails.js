@@ -3,9 +3,9 @@ import { useParams } from "react-router"
 import { useQueryApi } from '../Services/MyBeersService';
 import config from '../config';
 import { ErrorContext } from '../Components/Context/ErrorContext';
-import { Card, CardMedia, Typography, Box, Button, CircularProgress, Fab } from '@material-ui/core';
+import { Card, CardMedia, Typography, Box, Button, CircularProgress } from '@material-ui/core';
 import Rating from '@material-ui/lab/Rating';
-import AddIcon from '@material-ui/icons/Add'
+// import AddIcon from '@material-ui/icons/Add'
 import Ribbon from '../Components/Generic/Ribbon';
 import VerticalLine from '../Components/Generic/VerticalLine';
 import { Link } from 'react-router-dom';

@@ -44,7 +44,7 @@ const UserDetails = () =>
 
   useEffect(() =>
   {
-    executeQuery(`${config.myBeerApiUrl}/user/by-name?username=${userName.name}`)
+    executeQuery(`${config.myBeerApiUrl}/user/alldata?id=${userName.id}`)
   }, [])
   
   useEffect(() => {

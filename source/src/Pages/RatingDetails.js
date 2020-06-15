@@ -14,8 +14,9 @@ export default () =>
   const [myRating, setMyRating] = useState()
   const [dialogOpen, setDialogOpen] = useState(false)
   const [queryState, executeQuery] = useQueryApi()
-  const { myBeersState, executeCommand } = useMyBeersCommandApi()
+  const { executeCommand } = useMyBeersCommandApi()
   const { id } = useParams();
+  var user = JSON.parse(localStorage.getItem('currentUser'));
 
   const imageStyle = {
     backgroundSize: "contain",
@@ -26,7 +27,7 @@ export default () =>
 
   useEffect(() =>
   {
-    executeQuery(`${config.myBeerApiUrl}/beer/${id}/ratings`)
+    executeQuery(`${config.myBeerApiUrl}/beer/ratings?id=${id}`)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -35,26 +36,24 @@ export default () =>
     setBeer(queryState.data)
   }, [queryState.data])
 
-  useEffect(() =>
+  const setRating = (rating) => 
   {
-    if (myBeersState.data)
-    {
-      if (myRating)
-      {
-        setBeer({
-          ...beer, ratings: [...beer.ratings.filter(rating => rating.id !== myRating.id), myBeersState.data]
-            .sort((a, b) => { return new Date(a.createdTime) - new Date(b.createdTime) })
-        })
-      } else
-      {
-        setBeer({
-          ...beer, ratings: [...beer.ratings, myBeersState.data]
-            .sort((a, b) => { return new Date(a.createdTime) - new Date(b.createdTime) })
-        });
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [myBeersState.data])
+    executeQuery(`${config.myBeerApiUrl}/beer/ratings?id=${id}`)
+
+    // if (myRating)
+    // {
+    //   setBeer({
+    //     ...beer, ratings: [...beer.ratings.filter(rating => rating.id !== myRating.id), myBeersState.data]
+    //       .sort((a, b) => { return new Date(a.createdTime) - new Date(b.createdTime) })
+    //   })
+    // } else
+    // {
+    //   setBeer({
+    //     ...beer, ratings: [...beer.ratings, myBeersState.data]
+    //       .sort((a, b) => { return new Date(a.createdTime) - new Date(b.createdTime) })
+    //   });
+    // }
+  }
 
   const handleClose = () =>
   {
@@ -69,15 +68,15 @@ export default () =>
       Chugability: parseInt(rating.chugability),
       Value: parseInt(rating.value),
       FirstImpression: parseInt(rating.firstImpression),
-      Description: rating.description
+      Description: rating.description,
+      beerId: id,
+      userId: user.id
     }
-    if (myRating)
-    {
-      executeCommand(`${config.myBeerApiUrl}/rating/${myRating.id}`, thisRating)
-    } else
-    {
-      executeCommand(`${config.myBeerApiUrl}/rating`, { ...thisRating, beerId: id })
-    }
+
+    executeCommand(`${config.myBeerApiUrl}/rating/createUpdate`, thisRating)
+    setTimeout(() => {
+      setRating()
+    }, 1)
     setDialogOpen(false)
   }
 
@@ -98,10 +97,10 @@ export default () =>
       {beer &&
         <Card style={{ padding: ".5em" }}>
           <Box minHeight="10vh" width="100%" display="flex" marginBottom=".5em" justifyContent="space-between" >
-            <Typography variant="overline">{beer.beerData.productName}</Typography>
+            <Typography variant="overline">{beer.name}</Typography>
             <CardMedia
               style={imageStyle}
-              image={beer.beerData.imageUrl} />
+              image={beer.imageUrl} />
           </Box>
           {beer.ratings.length !== 0 && (
             (myRating) ? (

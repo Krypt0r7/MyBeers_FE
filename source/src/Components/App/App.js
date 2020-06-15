@@ -74,16 +74,14 @@ function App()
             <ProtectedRoute path="/mybeers" exact component={MyBeers} />
             <ProtectedRoute path="/beer/:id" component={BeerDetails} />
             <ProtectedRoute path="/profile" exact component={Profile} />
-            <ProtectedRoute path="/profile/:name" component={UserDetails}/>
+            <ProtectedRoute path="/profile/:id" component={UserDetails}/>
             <ProtectedRoute path="/ratings" exact component={Ratings} />
             <ProtectedRoute path="/ratings/:id" component={RatingDetails} />
             <ProtectedRoute path="/upcoming" component={UpcomingReleases} />
             <Route path="/login" component={Login} />
             <Route path="/register" component={Register} />
-            <SearchProvider>
-              <Route path="/search" exact component={Search} />
-              <Route path="/search/:id" component={SearchDetails} />
-            </SearchProvider>
+            <Route path="/search" exact component={Search} />
+            <Route path="/search/:id" component={SearchDetails} />
           </Switch>
         </Router>
 

@@ -15,7 +15,7 @@ export default ({open, handleClose, userId}) => {
 
   const handleSave = () => {
     if (password === passwordMatch) {
-      executeCommand(`${config.myBeerApiUrl}/user/${userId}/password`, {password});
+      executeCommand(`${config.myBeerApiUrl}/user/updatepassword`, {id: userId, password});
       handleClose();
     }else{
       setError("Password doesn't match")

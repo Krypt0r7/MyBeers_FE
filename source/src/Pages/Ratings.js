@@ -20,7 +20,7 @@ export default () =>
 
   useEffect(() =>
   {
-    executeQuery(`${config.myBeerApiUrl}/rating`)
+    executeQuery(`${config.myBeerApiUrl}/rating/ratings`)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -37,8 +37,7 @@ export default () =>
       moment(date).format('DD-MM-YYYY hh:mm')
     )
   }
-
-
+  
   return (
     <div>
       {ratings && ratings.map(rating => (
@@ -49,7 +48,7 @@ export default () =>
                 <Avatar src={rating.user.avatarUrl} style={{ marginRight: "15px" }} />
                 <Box display="flex" flexDirection="column">
                   <Typography variant="h6">{rating.user.username}</Typography>
-                  <Typography>{rating.beer.beerData.productName}</Typography>
+                  <Typography>{rating.beer.name}</Typography>
                 </Box>
               </Box>
               <Box display="flex" flexDirection="column" alignItems="center">

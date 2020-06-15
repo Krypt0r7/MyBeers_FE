@@ -12,7 +12,7 @@ export default () =>
 
   useEffect(() =>
   {
-    executeQuery(`${config.myBeerApiUrl}/beer/ranking`);
+    executeQuery(`${config.myBeerApiUrl}/beer/bestworst`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -21,13 +21,13 @@ export default () =>
       <Card className="cardMargin">
         <Typography className="text-center" variant="h5">The best of the best</Typography>
         {querryState.data &&
-          <TopList data={querryState.data.listOfBest}/>
+          <TopList data={querryState.data.bestBeer}/>
         }
       </Card>
       <Card className="cardMargin">
         <Typography className="text-center" variant="h5">The worst of the worst</Typography>
         {querryState.data &&
-          <TopList data={querryState.data.listOfWorst} />
+          <TopList data={querryState.data.worstBeer} />
         } 
       </Card>
       <ProgressCircle show={querryState.loading} />

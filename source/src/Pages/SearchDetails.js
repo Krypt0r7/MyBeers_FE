@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { useParams } from 'react-router'
 import { SearchContext } from '../Components/Context/SearchContext';
-import { useApiSearch } from '../Services/SystemetService';
+import { useQueryApi } from '../Services/MyBeersService';
 import { Card, Typography, CardMedia, Box, CardActions, Button } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { useMyBeersCommandApi } from '../Services/MyBeersService';
@@ -24,17 +24,14 @@ const SearchDetails = (props) =>
   const { id } = useParams();
   const [selectedBeer, setSelectedBeer] = useState();
   const [open, setOpen] = useState(false);
-  const { searchData } = useContext(SearchContext);
 
-  const {state, executeSearch} = useApiSearch(true)
-  const { myBeersState, executeCommand } = useMyBeersCommandApi(true)
+  const [ queryState, executeQuery ] = useQueryApi(true)
+  const { executeCommand } = useMyBeersCommandApi(true)
 
-  const searchResult = searchData && searchData.find(beer => parseInt(beer.productNumber) === id)
-
-  const getSelectedBeerFromApi = () =>
+  useEffect(() =>
   {
-    executeSearch(`${config.myBeerApiUrl}/systemet/${id}`)
-  }
+    executeQuery(`${config.myBeerApiUrl}/beer/beer?id=${id}`)
+  }, [])
 
   const handleClose = (reason) =>
   {
@@ -52,7 +49,7 @@ const SearchDetails = (props) =>
 
   const handleSaveBeer = () =>
   {
-    executeCommand(`${config.myBeerApiUrl}/beer?productId=${selectedBeer.productId}`)
+    props.history.push(`/ratings/${queryState.data.id}`)
   }
 
   const priceFormatter = (price) => {
@@ -63,32 +60,20 @@ const SearchDetails = (props) =>
     return price + " kr";
   }
 
-  useEffect(() => {
-    myBeersState.data && props.history.push(`/ratings/${myBeersState.data.id}`)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [myBeersState.data])
-
-
   useEffect(() =>
   {
-    searchResult ? setSelectedBeer(searchResult) : getSelectedBeerFromApi()
+    queryState.data && setSelectedBeer(queryState.data);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchResult])
-
-  useEffect(() =>
-  {
-    state.data && setSelectedBeer(state.data);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.data])
+  }, [queryState])
 
   return (
     <>
       {selectedBeer ?
         <Card className="details-card">
           <CardMedia image={selectedBeer.imageUrl} style={contentStyle} />
-          <Typography style={sectionStyle} variant="overline" >{selectedBeer.beverageDescriptionShort}</Typography>
-          <Typography variant="h5">{selectedBeer.productName}</Typography>
-          <Typography style={sectionStyle} variant="caption">Tillverkad i {selectedBeer.country}, {selectedBeer.originLevel1}, {selectedBeer.originLevel2}</Typography>
+          <Typography style={sectionStyle} variant="overline" >{selectedBeer.type}</Typography>
+          <Typography variant="h5">{selectedBeer.name}</Typography>
+          <Typography style={sectionStyle} variant="caption">Tillverkad i {selectedBeer.country}, {selectedBeer.state}, {selectedBeer.city}</Typography>
           <Box margin=".5em 0" display="flex" flexDirection="row" justifyContent="space-evenly">
             <Typography variant="h5">{priceFormatter(selectedBeer.price)}</Typography>
             <VerticalLine />
@@ -99,8 +84,8 @@ const SearchDetails = (props) =>
           <Typography style={sectionStyle} variant="body1">{selectedBeer.taste}</Typography>
           <CardActions >
             <Box justifyContent="space-between" display="flex" width="100%">
-              <Button onClick={handleSaveBeer} style={{color: "#fff"}} variant="contained" color="secondary" >Rate it</Button>
-              <Button onClick={handleAddBeer} size="medium" variant="outlined">Add to my beers</Button>
+              <Button onClick={handleSaveBeer} style={{color: "#fff"}} variant="contained" color="secondary">Rate it</Button>
+              <Button onClick={handleAddBeer} size="medium" variant="outlined">Add to list</Button>
             </Box>
           </CardActions>
         </Card>
@@ -112,7 +97,7 @@ const SearchDetails = (props) =>
       <CustomSnackBar
         open={open}
         close={handleClose}
-        prod={selectedBeer && selectedBeer.productName}
+        prod={selectedBeer && selectedBeer.name}
         action=' was added' />
     </>
   )

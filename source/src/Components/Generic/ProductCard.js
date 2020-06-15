@@ -17,7 +17,7 @@ export default ({beer, beerId, linkDestination, remove, rate = false}) =>
         image={beer.imageUrl ? beer.imageUrl : urlBuilder()} />
       <div className='card-details'>
         <CardContent className='card-content'>
-          <Typography variant='overline'>{beer.productName}</Typography>
+          <Typography variant='overline'>{beer.name}</Typography>
           <Typography variant='body2'>{beer.type}</Typography>
         </CardContent>
         <CardActions className='card-actions'>
