@@ -1,9 +1,9 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useQueryApi } from '../Services/MyBeersService'
 import querryString from 'query-string'
 import config from '../config'
 import ProductCard from '../Components/Generic/ProductCard'
-import { ErrorContext } from '../Components/Context/ErrorContext'
+// import { ErrorContext } from '../Components/Context/ErrorContext'
 import ProgressCircle from '../Components/Generic/ProgressCircle'
 import { Box, Fab } from '@material-ui/core'
 import AdvancedSearchDialog from '../Components/Search/AdvancedSearchDialog'
@@ -25,7 +25,7 @@ const Search = (props) =>
   })
   const [open, setOpen] = useState(false);
   const [queryState, executeQuery] = useQueryApi(true)
-  const {setError} = useContext(ErrorContext)
+  // const {setError} = useContext(ErrorContext)
 
   const fabStyle = {
     margin: 0,
@@ -82,7 +82,7 @@ const Search = (props) =>
         <>
           {queryState.data.map(beer => (
             <Box marginBottom=".5em" key={beer.id} >
-              <ProductCard beer={beer} linkDestination={`/search/${beer.id}`} />
+              <ProductCard beer={beer} linkDestination={`/beer/${beer.id}`} />
             </Box>
           ))}
         </>

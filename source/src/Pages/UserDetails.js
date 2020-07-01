@@ -45,10 +45,12 @@ const UserDetails = () =>
   useEffect(() =>
   {
     executeQuery(`${config.myBeerApiUrl}/user/alldata?id=${userName.id}`)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   
   useEffect(() => {
     getUserRatingData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queryState.data])
 
   return (

@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
-import { SearchContext } from '../Components/Context/SearchContext';
 import { useQueryApi } from '../Services/MyBeersService';
 import { Card, Typography, CardMedia, Box, CardActions, Button } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress'
@@ -31,7 +30,8 @@ const SearchDetails = (props) =>
   useEffect(() =>
   {
     executeQuery(`${config.myBeerApiUrl}/beer/beer?id=${id}`)
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id])
 
   const handleClose = (reason) =>
   {

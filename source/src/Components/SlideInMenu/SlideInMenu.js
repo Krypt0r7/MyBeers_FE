@@ -6,7 +6,7 @@ import ListItemText from '@material-ui/core/ListItemText'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import HomeIcon from '@material-ui/icons/Home'
 import NewReleaseIcon from '@material-ui/icons/NewReleases'
-import DrinkIcon from '@material-ui/icons/LocalDrink'
+import ListIcon from '@material-ui/icons/List'
 import SearchIcon from '@material-ui/icons/Search'
 import RateReview from '@material-ui/icons/RateReview'
 import { Link } from 'react-router-dom'
@@ -30,12 +30,18 @@ const SlideInMenu = (props) =>
               <ListItemText primary="Home" />
             </ListItem>
           </Link>
-          <Link to="/mybeers">
+          <Link to="/lists">
+            <ListItem button key="Lists" >
+              <ListItemIcon><ListIcon /></ListItemIcon>
+              <ListItemText primary="Lists" />
+            </ListItem>
+          </Link>
+          {/* <Link to="/mybeers">
             <ListItem button key="MyBeers">
               <ListItemIcon><DrinkIcon /></ListItemIcon>
               <ListItemText primary="My beers" />
             </ListItem>
-          </Link>
+          </Link> */}
           <Link to="/search">
             <ListItem button key="Search">
               <ListItemIcon><SearchIcon /></ListItemIcon>

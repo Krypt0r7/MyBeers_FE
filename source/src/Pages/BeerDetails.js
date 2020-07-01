@@ -3,20 +3,16 @@ import { useParams } from "react-router"
 import { useQueryApi } from '../Services/MyBeersService';
 import config from '../config';
 import { ErrorContext } from '../Components/Context/ErrorContext';
-import { Card, CardMedia, Typography, Box, Button, CircularProgress } from '@material-ui/core';
+import { Card, CardMedia, Typography, Box, Button, CircularProgress, CardActions } from '@material-ui/core';
 import Rating from '@material-ui/lab/Rating';
-// import AddIcon from '@material-ui/icons/Add'
 import Ribbon from '../Components/Generic/Ribbon';
 import VerticalLine from '../Components/Generic/VerticalLine';
 import { Link } from 'react-router-dom';
 
-
 const BeerDetails = () =>
 {
-
-
   const contentStyle = {
-    height: "55vh",
+    height: "50vh",
     backgroundSize: "contain",
     marginBottom: "1em"
   }
@@ -33,7 +29,7 @@ const BeerDetails = () =>
 
   useEffect(() =>
   {
-    executeQuery(`${config.myBeerApiUrl}/beer/${id}`)
+    executeQuery(`${config.myBeerApiUrl}/beer/beer?id=${id}`)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -59,52 +55,36 @@ const BeerDetails = () =>
     <>
       {beer ?
         <Card className="details-card" style={{ position: "relative" }}>
-          <CardMedia image={beer.beerData.imageUrl} style={contentStyle}>
+          <CardMedia image={beer.imageUrl ? beer.imageUrl : ''} style={contentStyle}>
             <Box width="100%" height="100%">
               <Ribbon text={"YPK: " + beer.ypk} />
             </Box>
           </CardMedia>
-          <Typography style={sectionStyle} variant="overline" >{beer.beerData.beverageDescriptionShort}</Typography>
-          <Typography variant="h5">{beer.beerData.productName}</Typography>
-          <Typography style={sectionStyle} variant="caption">Brewed in {beer.beerData.country}, {beer.beerData.originLevel1}, {beer.beerData.originLevel2}</Typography>
+          <Typography style={sectionStyle} variant="overline" >{beer.style}</Typography>
+          <Typography variant="h5">{beer.name}</Typography>
+          <Typography style={sectionStyle} variant="caption">Brewed in {beer.country}, {beer.state}, {beer.city}</Typography>
           <Box margin=".5em 0" display="flex" flexDirection="row" justifyContent="space-evenly">
-            <Typography variant="h5">{priceFormatter(beer.beerData.price)}</Typography>
+            <Typography variant="h5">{priceFormatter(beer.price)}</Typography>
             <VerticalLine />
-            <Typography variant="h5">{beer.beerData.volume} ml</Typography>
+            <Typography variant="h5">{beer.volume} ml</Typography>
             <VerticalLine />
-            <Typography variant="h5">{beer.beerData.alcoholPercentage} %</Typography>
+            <Typography variant="h5">{beer.alcoholPercentage} %</Typography>
           </Box>
-          <Typography style={sectionStyle} variant="body1">{beer.beerData.taste}</Typography>
-          <Box display="flex" justifyContent="space-between" alignItems="center">
-            <Box display="flex" flexDirection="column" alignItems="start" padding="0 0 5px 0">
-              <Box display="flex" flexDirection="column">
-                {beer.rating && (
-                  <>
-                    <Typography variant="body1">My rating:</Typography>
-                    <Rating name="overallRating" value={beer.rating ? beer.rating.overallRating : 0} />
-                  </>
-                )}
-              </Box>
+          <Typography style={sectionStyle} variant="body1">{beer.taste}</Typography>
+          <CardActions>
+            <Box display="flex" justifyContent="space-between" width="100%" alignItems="center">
               <Button variant="outlined">
                 <Link to={`/ratings/${beer.id}`} >See ratings</Link>
               </Button>
+              <Button variant="outlined" color="primary">Add to list</Button>
             </Box>
-            <div></div>
-            {/* <Fab
-              variant="extended"
-              size="large"
-              aria-label="add">
-              <AddIcon />
-              Add to list
-            </Fab> */}
-          </Box>
+          </CardActions>
         </Card>
         :
         <Box display="flex" justifyContent="center" alignItems="center" height="90vh">
           <CircularProgress color="secondary" size="100" />
         </Box>
       }
-
     </>
   )
 }

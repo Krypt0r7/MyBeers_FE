@@ -16,7 +16,7 @@ export default () =>
   const [queryState, executeQuery] = useQueryApi()
   const { executeCommand } = useMyBeersCommandApi()
   const { id } = useParams();
-  var user = JSON.parse(localStorage.getItem('currentUser'));
+  const user = JSON.parse(localStorage.getItem('currentUser'));
 
   const imageStyle = {
     backgroundSize: "contain",
@@ -36,7 +36,7 @@ export default () =>
     setBeer(queryState.data)
   }, [queryState.data])
 
-  const setRating = (rating) => 
+  const setRating = () => 
   {
     executeQuery(`${config.myBeerApiUrl}/beer/ratings?id=${id}`)
 
