@@ -53,6 +53,10 @@ const AddBeerModal = ({open, handleClose, handleUpdate, listItems}) => {
     setTableData(data)
   }
 
+  const cellStyle = {
+    padding: "6px 2px 6px 10px"
+  }
+
   const columns = [
     {
       id: 'name',
@@ -92,7 +96,7 @@ const AddBeerModal = ({open, handleClose, handleUpdate, listItems}) => {
               <TableHead>
                 <TableRow>
                   {columns.map((column) => (
-                    <TableCell key={column.id}>
+                    <TableCell style={cellStyle} size="small" key={column.id}>
                       {column.label}
                     </TableCell>
                   ))}
@@ -102,16 +106,16 @@ const AddBeerModal = ({open, handleClose, handleUpdate, listItems}) => {
                 {tableData && tableData.map((beer, index) => {
                   return (
                     <TableRow key={index}>
-                      <TableCell>
+                      <TableCell style={cellStyle} size="small">
                         {beer.name}
                       </TableCell>
-                      <TableCell>
+                      <TableCell style={cellStyle} size="small">
                         {beer.container}
                       </TableCell>
-                      <TableCell>
+                      <TableCell style={cellStyle} size="small">
                         {beer.alcohol}
                       </TableCell>
-                      <TableCell>
+                      <TableCell style={cellStyle} size="small">
                         <Checkbox checked={beer.check} onClick={() => handleUpdateList(index)} />
                       </TableCell>
                     </TableRow>
