@@ -3,10 +3,10 @@ import { useParams, Link, useHistory } from 'react-router-dom'
 import { useQueryApi, useMyBeersCommandApi } from '../Services/MyBeersService';
 import AddBeerModal from '../Components/List/AddBeerModal'
 import config from '../config';
-import { Card, Box, Button, CardActions, CardHeader, IconButton, List, Avatar, ListItemText, ListItemAvatar, ListItem, ListItemSecondaryAction, Menu, MenuItem, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Typography } from '@material-ui/core';
+import { Card, Box, Button, CardActions, CardHeader, IconButton, List, Avatar, ListItemText, ListItemAvatar, ListItem, ListItemSecondaryAction, Menu, MenuItem, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Typography, Chip } from '@material-ui/core';
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 import DeleteIcon from '@material-ui/icons/Delete'
-import EditListModal from '../Components/List/EditListModal';
+import EditListModal from '../Components/List/EditList';
 import RemoveListModal from '../Components/List/RemoveListModal';
 
 const ListDetails = () =>
@@ -21,12 +21,18 @@ const ListDetails = () =>
   const [addBeerModal, setAddBeerModal] = useState(false);
   const [removeListModal, setRemoveListModal] = useState(false)
   const history = useHistory()
+  const user = JSON.parse(localStorage.getItem('currentUser'))
+  const [isOwner, setIsOwner] = useState(false);
+  const [isCollaborator, setIsCollaborator] = useState(false);
 
   const expansionStyle = {
     width: '100%',
     padding: '0'
   }
 
+  const chipStyle = {
+    margin: "0 .2em"
+  }
 
   useEffect(() =>
   {
@@ -37,54 +43,68 @@ const ListDetails = () =>
   useEffect(() =>
   {
     setList(querryState.data)
+    if (querryState.data)
+    {
+      setIsOwner(querryState.data.owner.id === user.id)
+      setIsCollaborator(querryState.data.collaborators.some(x => x.id === user.id))
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [querryState.data])
 
-  const handleSave = (ids) => {
-    executeCommand(`${config.myBeerApiUrl}/list/updatebeers`, {listId: list.id, beerIds: ids})
+  const handleSave = (ids) =>
+  {
+    executeCommand(`${config.myBeerApiUrl}/list/updatebeers`, { listId: list.id, beerIds: ids })
   }
 
-  const handleMenuClick = (event) => {
+  const handleMenuClick = (event) =>
+  {
     setAncorEl(event.currentTarget)
   }
 
-  const handleClose = () => {
+  const handleClose = () =>
+  {
     setAncorEl(null)
   }
-  const handleOpenAddBeerModal = () => {
+  const handleOpenAddBeerModal = () =>
+  {
     setAncorEl(null)
     setAddBeerModal(true)
   }
-  
-  const removeFromList = (id) => {
-    const beers = list.beers.filter(x => x.id !== id);
-    setList({...list, beers: beers})
 
-    const beerIds = beers.map(x => {
+  const removeFromList = (id) =>
+  {
+    const beers = list.beers.filter(x => x.id !== id);
+    setList({ ...list, beers: beers })
+
+    const beerIds = beers.map(x =>
+    {
       return x.id
     })
     handleSave(beerIds)
   }
 
-  const handleDeleteList = () => {
-    executeCommand(`${config.myBeerApiUrl}/list/deleteList`, {Id: list.id})
-    setTimeout(() => {
+  const handleDeleteList = () =>
+  {
+    executeCommand(`${config.myBeerApiUrl}/list/deleteList`, { Id: list.id })
+    setTimeout(() =>
+    {
       history.push('/lists')
     }, 100);
   }
 
-  const handleToList = (list) => {
+  const handleToList = (list) =>
+  {
     setList(list);
-    const beerIds = list.beers.map(x => {return x.id})
+    const beerIds = list.beers.map(x => { return x.id })
     handleSave(beerIds)
     setAddBeerModal(false)
   }
 
-  const handleSaveEdit = (name, description) => {
-    console.log(name, description);
-    
-    executeCommand(`${config.myBeerApiUrl}/list/updateListInfo`, {id: list.id, name, description})
-    setList({...list, name, description})
+  const handleSaveEdit = (name, description, collabList) =>
+  {
+    const collabIds = collabList.map(x => { return x.id })
+    executeCommand(`${config.myBeerApiUrl}/list/updateListInfo`, { id: list.id, name, description, collaboratorids: collabIds })
+    setList({ ...list, name, description, collaborators: collabList })
     setAncorEl(null)
     setEditOpen(false)
   }
@@ -94,7 +114,7 @@ const ListDetails = () =>
       {list &&
         <Card style={{ margin: ".5em" }}>
           <CardHeader
-            action={
+            action={(isCollaborator || isOwner) &&
               <IconButton aria-controls="optionMenu" aria-haspopup="true" onClick={handleMenuClick}>
                 <MoreVertIcon />
               </IconButton>
@@ -102,20 +122,36 @@ const ListDetails = () =>
             title={list.name}
             subheader={list.description}
           />
-          <Menu 
+
+          <Menu
             id="optionMenu"
             keepMounted
             anchorEl={ancorEl}
             open={menuOpen}
             onClose={handleClose}>
-              <MenuItem onClick={handleOpenAddBeerModal}>Add beer</MenuItem>
-              <MenuItem onClick={() => setEditOpen(true)}>Edit list info</MenuItem>
-              <MenuItem onClick={() => setRemoveListModal(true)}>Delete list</MenuItem>
+            <MenuItem onClick={handleOpenAddBeerModal}>Add beer</MenuItem>
+            {isOwner &&
+              <div>
+                <MenuItem onClick={() => setEditOpen(true)}>Edit list info</MenuItem>
+                <MenuItem onClick={() => setRemoveListModal(true)}>Delete list</MenuItem>
+              </div>
+            }
+
           </Menu>
+
+          {list.collaborators.length !== 0 &&
+            <Box display="flex" margin="0 1em" alignItems="center" flexWrap="wrap">
+              <Typography>Collaborators: </Typography>
+              {list && list.collaborators.map(user => (
+                <Chip style={chipStyle} key={user.id} color="primary" variant="outlined" label={user.username} />
+              ))}
+            </Box>
+          }
+
           <Box padding=".5em">
             <List>
               {list.beers && list.beers.map(beer => (
-                <ExpansionPanel key={beer.id}> 
+                <ExpansionPanel key={beer.id}>
                   <ExpansionPanelSummary style={expansionStyle}>
                     <ListItem >
                       <ListItemAvatar>
@@ -144,7 +180,7 @@ const ListDetails = () =>
                     </Box>
                   </ExpansionPanelDetails>
                 </ExpansionPanel>
-                ))
+              ))
               }
             </List>
           </Box>
@@ -157,27 +193,27 @@ const ListDetails = () =>
           </CardActions>
         </Card>
       }
-      <AddBeerModal 
-        open={addBeerModal} 
+      <AddBeerModal
+        open={addBeerModal}
         handleClose={() => setAddBeerModal(false)}
         handleUpdate={handleToList}
         listItems={list} />
-      {list &&
+      {
+        list &&
         <>
-          <EditListModal 
-            descriptionProp={list.description}
+          <EditListModal
+            list={list}
             handleClose={() => setEditOpen(false)}
-            nameProp={list.name}
             handleSave={handleSaveEdit}
-            open={editOpen}/>
-           <RemoveListModal 
+            open={editOpen} />
+          <RemoveListModal
             open={removeListModal}
             remove={handleDeleteList}
             handleClose={() => setRemoveListModal(false)}
-            list={list}/>
+            list={list} />
         </>
-      } 
-    </div>
+      }
+    </div >
   )
 }
 

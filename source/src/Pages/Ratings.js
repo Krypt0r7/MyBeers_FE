@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { useQueryApi } from '../Services/MyBeersService';
 import { ErrorContext } from '../Components/Context/ErrorContext';
+import ProgressCircle from '../Components/Generic/ProgressCircle'
 import config from '../config';
 
 export default () =>
@@ -41,7 +42,7 @@ export default () =>
   return (
     <div>
       {ratings && ratings.map(rating => (
-        <Card key={rating.createdTime} style={{ margin: "10px" }}>
+        <Card key={rating.id} style={{ margin: "10px" }}>
           <Link style={linkStyle} to={`/ratings/${rating.beer.id}`}>
             <Box display="flex" justifyContent="space-between" margin="10px" >
               <Box display="flex" alignItems="center">
@@ -52,13 +53,14 @@ export default () =>
                 </Box>
               </Box>
               <Box display="flex" flexDirection="column" alignItems="center">
-                <Typography className="ratingListDate" variant="caption">{formatDate(rating.createdTime)}</Typography>
-                <Rating value={rating.overallRating} readOnly precision={.1} size="small" name={rating.createdTime} />
+                <Typography className="ratingListDate" variant="caption">{formatDate(rating.created)}</Typography>
+                <Rating value={rating.overallRating} readOnly precision={.1} size="small" name={rating.created} />
               </Box>
             </Box>
           </Link>
         </Card>
       ))}
+      <ProgressCircle show={queryState.loading}/>
     </div>
   )
 }

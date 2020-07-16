@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Box, Input, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Checkbox } from '@material-ui/core'
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Box, Input, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Checkbox, useMediaQuery } from '@material-ui/core'
 import { useQueryApi } from '../../Services/MyBeersService';
 import config from '../../config';
 
@@ -8,6 +8,7 @@ const AddBeerModal = ({open, handleClose, handleUpdate, listItems}) => {
   const [querryState, executeQuery] = useQueryApi()
   const [searchString, setSearchString] = useState(null)
   const [tableData, setTableData] = useState([])
+  const isLarge = useMediaQuery('(min-width:500px)')
   
   const handleSearch = (event) => {
     if (event.key === 'Enter') {
@@ -37,11 +38,17 @@ const AddBeerModal = ({open, handleClose, handleUpdate, listItems}) => {
   }, [querryState.data])
 
   const handleSetingList = () => {
-    const beers = tableData.filter(x => x.check)
-    const items = [...listItems.beers, ...beers.filter(f => !listItems.beers.some(x => x.id === f.id))]
+    if (tableData) {
       
-    handleUpdate({...listItems, beers: items});
-    setTableData([])
+      const beers = tableData.filter(x => x.check)
+      const items = [...listItems.beers, ...beers.filter(f => !listItems.beers.some(x => x.id === f.id))]
+      
+      handleUpdate({...listItems, beers: items});
+      setTableData([])
+    }else{
+      handleClose();
+    }
+
   }
 
   const handleUpdateList = (index) => {
@@ -60,19 +67,28 @@ const AddBeerModal = ({open, handleClose, handleUpdate, listItems}) => {
   const columns = [
     {
       id: 'name',
-      label: 'Name'
+      label: 'Name',
+      onlyLarge: false
+    },
+    {
+      id: 'producer',
+      label: 'Producer',
+      onlyLarge: true
     },
     {
       id: 'container',
-      label: 'Container'
+      label: 'Container',
+      onlyLarge: false
     },
     {
       id: 'alcohol',
-      label: 'Alcohol'
+      label: 'Alcohol',
+      onlyLarge: false
     },
     {
       id: 'check',
-      label: 'Added'
+      label: 'Added',
+      onlyLarge: false
     }
   ]
 
@@ -95,20 +111,36 @@ const AddBeerModal = ({open, handleClose, handleUpdate, listItems}) => {
             <Table>
               <TableHead>
                 <TableRow>
-                  {columns.map((column) => (
-                    <TableCell style={cellStyle} size="small" key={column.id}>
-                      {column.label}
-                    </TableCell>
-                  ))}
+                  {!isLarge ?
+                    <>
+                      {columns.filter(f => !f.onlyLarge).map((column) => (
+                        <TableCell style={cellStyle} size="small" key={column.id}>
+                          {column.label}
+                        </TableCell>
+                      ))}
+                    </>
+                    :
+                    <>
+                      {columns.map((column) => (
+                        <TableCell style={cellStyle} size="small" key={column.id}>
+                          {column.label}
+                        </TableCell>
+                      ))}
+                    </>
+                  }
                 </TableRow>
               </TableHead>
               <TableBody>
-                {tableData && tableData.map((beer, index) => {
-                  return (
+                {tableData && tableData.map((beer, index) => (
                     <TableRow key={index}>
                       <TableCell style={cellStyle} size="small">
                         {beer.name}
                       </TableCell>
+                      {isLarge &&
+                        <TableCell style={cellStyle} size="small">
+                          {beer.producer}
+                        </TableCell>
+                      }
                       <TableCell style={cellStyle} size="small">
                         {beer.container}
                       </TableCell>
@@ -120,7 +152,7 @@ const AddBeerModal = ({open, handleClose, handleUpdate, listItems}) => {
                       </TableCell>
                     </TableRow>
                   )
-                })}
+                )}
               </TableBody>
             </Table>
           </TableContainer>

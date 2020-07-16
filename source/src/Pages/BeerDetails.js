@@ -3,8 +3,9 @@ import { useParams } from "react-router"
 import { useQueryApi } from '../Services/MyBeersService';
 import config from '../config';
 import { ErrorContext } from '../Components/Context/ErrorContext';
-import { Card, CardMedia, Typography, Box, Button, CircularProgress, CardActions } from '@material-ui/core';
-import Rating from '@material-ui/lab/Rating';
+import { Card, CardMedia, Typography, Box, Button, CircularProgress, CardActions, List, ListSubheader, ListItem, ListItemText } from '@material-ui/core';
+// import Rating from '@material-ui/lab/Rating';
+import BasicModal from '../Components/Generic/BasicModal/BasicModal'
 import Ribbon from '../Components/Generic/Ribbon';
 import VerticalLine from '../Components/Generic/VerticalLine';
 import { Link } from 'react-router-dom';
@@ -22,14 +23,18 @@ const BeerDetails = () =>
   }
 
   const [queryState, executeQuery] = useQueryApi()
-  const [beer, setBeer] = useState();
+  const [listsState, executeListQuery] = useQueryApi()
+  const [beer, setBeer] = useState()
+  const [addToListModal, setAddToListModal] = useState(false)
+  const [lists, setLists] = useState(null)
   const { setError } = useContext(ErrorContext)
-
+  const user = JSON.parse(localStorage.getItem('currentUser'))
   const { id } = useParams();
 
   useEffect(() =>
   {
-    executeQuery(`${config.myBeerApiUrl}/beer/beer?id=${id}`)
+    executeQuery(`${config.myBeerApiUrl}/beer/withLists?id=${id}&userId=${user.id}`)
+    executeListQuery(`${config.myBeerApiUrl}/list/ListsFromUser?UserId=${user.id}`)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -39,6 +44,11 @@ const BeerDetails = () =>
     queryState.error && setError(queryState.error.response)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queryState])
+
+  useEffect(() =>
+  {
+    listsState.data && setLists(listsState.data)
+  }, [listsState])
 
   const priceFormatter = (price) =>
   {
@@ -76,7 +86,7 @@ const BeerDetails = () =>
               <Button variant="outlined">
                 <Link to={`/ratings/${beer.id}`} >See ratings</Link>
               </Button>
-              <Button variant="outlined" color="primary">Add to list</Button>
+              <Button onClick={() => setAddToListModal(true)} variant="outlined" color="primary">Add to list</Button>
             </Box>
           </CardActions>
         </Card>
@@ -85,6 +95,38 @@ const BeerDetails = () =>
           <CircularProgress color="secondary" size="100" />
         </Box>
       }
+      <BasicModal
+        open={addToListModal}
+        fullScreen={false}
+        fullWidth
+        handleClose={() => setAddToListModal(false)}>
+        <div>
+          <List>
+            {['MyLists', 'Collaborating on'].map((name, index) => (
+              <li>
+                <ul>
+                  <ListSubheader>{name}</ListSubheader>
+                  {lists && (
+                    index === 1 ? lists.myLists.map(list => (
+                     <ListItem>
+                       <ListItemText>{list.name}</ListItemText>
+                     </ListItem>
+                   ))
+                   :
+                   lists.collaborateLists.map(list => (
+                     <ListItem>
+                       <ListItemText>{list.name}</ListItemText>
+                     </ListItem>
+                   ))
+                  )
+                  }
+                </ul>
+              </li>
+            ))}
+          </List>
+        </div>
+      </BasicModal>
+
     </>
   )
 }
