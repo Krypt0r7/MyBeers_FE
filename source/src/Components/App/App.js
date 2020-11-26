@@ -5,7 +5,6 @@ import MenuBar from '../Menu/MenuBar'
 import SlideInMenu from '../SlideInMenu/SlideInMenu'
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
 import Index from '../../Pages/Index'
-// import MyBeers from '../../Pages/MyBeers'
 import Lists from '../../Pages/Lists'
 import ListDetails from '../../Pages/ListDetails'
 import Login from '../../Pages/Login'
@@ -16,12 +15,12 @@ import SearchDetails from '../../Pages/SearchDetails'
 import BeerDetails from '../../Pages/BeerDetails'
 import Ratings from '../../Pages/Ratings'
 import RatingDetails from '../../Pages/RatingDetails'
-// import SearchProvider from '../Context/SearchContext';
 import ErrorDisplayBoundry from '../Context/ErrorContext';
 import ErrorSnackbar from '../Generic/ErrorSnackBar';
 import ProtectedRoute from '../Generic/ProtectedRoute';
 import UpcomingReleases from '../../Pages/UpcomingReleases';
 import UserDetails from '../../Pages/UserDetails'
+import ChangeBeerInfo from '../../Pages/ChangeBeerInfo'
 
 
 function App()
@@ -75,7 +74,8 @@ function App()
             <Route path="/" exact component={Index} />
             <ProtectedRoute path="/lists" exact component={Lists} />
             <ProtectedRoute path="/list/:id" component={ListDetails} />
-            <ProtectedRoute path="/beer/:id" component={BeerDetails} />
+            <ProtectedRoute path="/beer/:id" exact component={BeerDetails} />
+            <ProtectedRoute path="/beer/:id/edit" component={ChangeBeerInfo} />
             <ProtectedRoute path="/profile" exact component={Profile} />
             <ProtectedRoute path="/profile/:id" component={UserDetails}/>
             <ProtectedRoute path="/ratings" exact component={Ratings} />

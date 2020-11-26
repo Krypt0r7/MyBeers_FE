@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default ({ text,  }) =>
+export default ({ text }) =>
 {
   const styles = {
     top: 25,

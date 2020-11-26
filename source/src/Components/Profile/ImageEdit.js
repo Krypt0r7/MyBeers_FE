@@ -28,7 +28,7 @@ export default ({open, handleClose, saveImage}) => {
       <DialogTitle>Change avatar image</DialogTitle>
       <DialogContent>
         <DialogContentText>Change the avatar image by selecting a new image</DialogContentText>
-        <input type="file" accept="image/png" onChange={handleSelected} />
+        <input type="file" accept="image/*" onChange={handleSelected} />
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>

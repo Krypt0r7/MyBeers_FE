@@ -60,7 +60,7 @@ export default () =>
     setDialogOpen(false)
   }
 
-  const handleSave = (rating) =>
+  const handleSave = async (rating) =>
   {
     const thisRating = {
       Taste: parseInt(rating.taste),
@@ -73,10 +73,8 @@ export default () =>
       userId: user.id
     }
 
-    executeCommand(`${config.myBeerApiUrl}/rating/createUpdate`, thisRating)
-    setTimeout(() => {
-      setRating()
-    }, 1)
+    await executeCommand(`${config.myBeerApiUrl}/rating/createUpdate`, thisRating)
+    setRating()
     setDialogOpen(false)
   }
 

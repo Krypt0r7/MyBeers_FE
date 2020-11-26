@@ -52,7 +52,7 @@ export const useMyBeersCommandApi = (manual) => {
     loading: false
   });
   
-  const executeCommand = (path, payLoad) =>
+  const executeCommand = async (path, payLoad) =>
   {
     const authenticationHead = authHeader();
     
